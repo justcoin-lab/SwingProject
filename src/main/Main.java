@@ -10,5 +10,6 @@ public class Main {
         System.out.println("메인입니다");
         System.out.println("메인테스트");
         System.out.println("메인테스트");
+        System.out.println("메인테스트");
     }
 }
