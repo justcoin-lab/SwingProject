@@ -8,5 +8,7 @@ public class Main {
 
         new PlayerForm("대한민국 축구팀 관리 프로그램");
         System.out.println("메인입니다");
+        System.out.println("메인테스트");
+        System.out.println("메인테스트");
     }
 }
