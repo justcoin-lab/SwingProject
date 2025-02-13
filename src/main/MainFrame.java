@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import match.ResultFrame;
+import player.PlayerForm;
 
 public class MainFrame extends JFrame implements ActionListener{
 	
@@ -43,7 +44,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		btn2 = new JButton("구단 선수 목록");
 		btn2.setBounds(205, 10, 185, 50);
 		btn2.setBackground(new Color(255, 228, 196));
-		btn2.setBorderPainted(false);
+		btn2.addActionListener(this);
 		
 		btn3 = new JButton("선수 입력");
 		btn3.setBounds(400, 10, 185, 50);
@@ -77,6 +78,9 @@ public class MainFrame extends JFrame implements ActionListener{
 		
 		if(obj == btn4) {
 			new ResultFrame("national team management");
+			dispose();
+		}else if(obj == btn2) {
+			new PlayerForm("선수명단");
 			dispose();
 		}
 		
