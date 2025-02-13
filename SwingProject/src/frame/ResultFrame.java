@@ -2,25 +2,29 @@ package frame;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-public class MainFrame extends JFrame implements ActionListener{
-	
+public class ResultFrame extends JFrame implements ActionListener{
 	public JPanel mainSpace;
+	public JPanel listInfo;
+	public JPanel mvpInfo;
 	public JButton btn1;
 	public JButton btn2;
 	public JButton btn3;
 	public JButton btn4;
 	public JButton btn5;
+	public ResultFrame model;
 	
-	public MainFrame(String title) {
+	public ResultFrame(String title) {
 		setTitle(title);
 		setSize(1000, 600);
 		setLocation(460, 240);
@@ -34,6 +38,16 @@ public class MainFrame extends JFrame implements ActionListener{
 		mainSpace = new JPanel();
 		mainSpace.setBackground(new Color(255, 255, 240));
 		mainSpace.setBounds(0, 60, 1000, 540);
+		
+		listInfo = new JPanel();
+		listInfo.setBackground(new Color(255, 255, 240));
+		listInfo.setBounds(20, 80, 540, 460);
+		listInfo.setBorder(new TitledBorder(new LineBorder(new Color(105, 105, 105))));
+		
+		mvpInfo = new JPanel();
+		mvpInfo.setBackground(new Color(255, 255, 240));
+		mvpInfo.setBounds(580, 80, 280, 460);
+		mvpInfo.setBorder(new TitledBorder(new LineBorder(new Color(105, 105, 105))));
 		
 		btn1 = new JButton("대한민국 축구단");
 		btn1.setBounds(10, 10, 185, 50);
@@ -67,18 +81,23 @@ public class MainFrame extends JFrame implements ActionListener{
 		add(btn4);
 		add(btn5);
 		
+		JLabel mainlbl = new JLabel("최근 경기");
+		mainlbl.setFont(new Font("바탕", Font.BOLD, 15));
+		mainlbl.setBounds(270, 90, 90, 30);
+		mainlbl.setOpaque(true);
+		mainlbl.setBackground(new Color(255, 255, 240));
+		add(mainlbl);
+		
+		add(listInfo);
+		add(mvpInfo);
 		add(mainSpace);
+		
 		setVisible(true);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Object obj = e.getSource();
-		
-		if(obj == btn4) {
-			new ResultFrame("national team management");
-			dispose();
-		}
+		// TODO Auto-generated method stub
 		
 	}
 }
