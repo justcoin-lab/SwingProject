@@ -1,13 +1,11 @@
 package main;
 
-import player.PlayerList;
-
-import javax.swing.*;
+import player.PlayerForm;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        new PlayerList();
+        new PlayerForm("대한민국 축구팀 관리 프로그램");
     }
 }
