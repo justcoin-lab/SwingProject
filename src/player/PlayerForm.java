@@ -23,6 +23,8 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
     public JButton btn3;
     public JButton btn4;
     public JButton btn5;
+    public JButton btn6;
+    public JButton btn7;
     //상위 매뉴 버튼 시작---------------------
 
 
@@ -46,12 +48,12 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
 
         JPanel infoListPlayer = new JPanel(); //선수리스트정보 패널
         infoListPlayer.setBackground(new Color(0xEDEDED));
-        infoListPlayer.setBounds(10, 80, 300, 450);
+        infoListPlayer.setBounds(10, 150, 300, 400);
         infoListPlayer.setBorder(new TitledBorder(new LineBorder(Color.LIGHT_GRAY,1)));
 
         JPanel infoPlayerPanel = new JPanel(); //선수정보 패널
         infoPlayerPanel.setBackground(new Color(0xEDEDED));
-        infoPlayerPanel.setBounds(340, 80, 500, 450);
+        infoPlayerPanel.setBounds(340, 150, 500, 400);
         infoPlayerPanel.setBorder(new TitledBorder(new LineBorder(Color.LIGHT_GRAY,1)));
 
         add(panCenter);
@@ -62,7 +64,7 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
 
         //--선수리스트 라벨 시작---------------------
         JLabel playerList = new JLabel("선수 리스트");
-        playerList.setBounds(30, 55, 80, 20);
+        playerList.setBounds(100, 120, 80, 20);
         playerList.setOpaque(true);
         playerList.setBackground(new Color(0xEDEDED));
         add(playerList);
@@ -70,7 +72,7 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
 
         //--선수정보 라벨 시작---------------------
         JLabel playerInfo = new JLabel("선수 정보");
-        playerInfo.setBounds(530, 55, 80, 20);
+        playerInfo.setBounds(530, 120, 80, 20);
         playerList.setOpaque(true);
         playerList.setBackground(new Color(0xEDEDED));
         add(playerInfo);
@@ -112,6 +114,19 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
         //메인화면 맨위 버튼 끝-------
 
         //사이드 버튼 시작-----------
+        btn6 = new JButton("업데이트");
+        btn6.setBounds(880, 200, 90, 50);
+        btn6.setBackground(new Color(0x476EC5));
+        btn6.setBorderPainted(false);
+
+        btn7 = new JButton("방출");
+        btn7.setBounds(880, 400, 90, 50);
+        btn7.setBackground(new Color(0x476EC5));
+        btn7.setBorderPainted(false);
+
+        add(btn6);
+        add(btn7);
+
 
         //사이드 버튼 끝-----------
 
