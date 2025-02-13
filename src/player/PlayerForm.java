@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class PlayerForm extends JFrame implements ActionListener, MouseListener, KeyListener {
-    private JLabel pn;
+    /*private JLabel pn;
     private JLabel name;
     private JLabel age;
     private JLabel height;
@@ -15,7 +15,7 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
     private JLabel position;
     private JLabel injury;
     private JLabel roster;
-    private JLabel comment;
+    private JLabel comment;*/
 
     //상위 매뉴 버튼 시작---------------------
     private JButton btn1;
