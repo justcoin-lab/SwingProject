@@ -18,11 +18,11 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
     private JLabel comment;*/
 
     //상위 매뉴 버튼 시작---------------------
-    private JButton btn1;
-    private JButton btn2;
-    private JButton btn3;
-    private JButton btn4;
-    private JButton btn5;
+    public JButton btn1;
+    public JButton btn2;
+    public JButton btn3;
+    public JButton btn4;
+    public JButton btn5;
     //상위 매뉴 버튼 시작---------------------
 
 
