@@ -53,7 +53,7 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
 
         JPanel infoPlayerPanel = new JPanel(); //선수정보 패널
         infoPlayerPanel.setBackground(new Color(0xEDEDED));
-        infoPlayerPanel.setBounds(340, 150, 500, 400);
+        infoPlayerPanel.setBounds(370, 150, 500, 400);
         infoPlayerPanel.setBorder(new TitledBorder(new LineBorder(Color.LIGHT_GRAY,1)));
 
         add(panCenter);
@@ -63,8 +63,8 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
 
 
         //--선수리스트 라벨 시작---------------------
-        JLabel playerList = new JLabel("선수 리스트");
-        playerList.setBounds(100, 120, 80, 20);
+        JLabel playerList = new JLabel("선수 리스트 검색");
+        playerList.setBounds(50, 120, 100, 20);
         playerList.setOpaque(true);
         playerList.setBackground(new Color(0xEDEDED));
         add(playerList);
@@ -72,11 +72,21 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
 
         //--선수정보 라벨 시작---------------------
         JLabel playerInfo = new JLabel("선수 정보");
-        playerInfo.setBounds(530, 120, 80, 20);
+        playerInfo.setBounds(580, 120, 80, 20);
         playerList.setOpaque(true);
         playerList.setBackground(new Color(0xEDEDED));
         add(playerInfo);
         //--선수정보 라벨 끝---------------------
+
+        //선수 리스트 검색창
+
+        JTextField playerSearch = new JTextField();
+        playerSearch.setBounds(150, 120, 170, 20);
+        playerSearch.addKeyListener(this);
+        add(playerSearch);
+
+        //선수 리스트 검색창 끝
+
 
 
         //메인화면 맨위 버튼 시작-------
@@ -127,10 +137,32 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
         add(btn6);
         add(btn7);
 
-
         //사이드 버튼 끝-----------
 
+
+
+        //JTable 시작--------------------
+        /*PlayerList model = new PlayerList;
+        model.setData();*/
+
+        JTable table = new JTable();
+        table.addMouseListener(this);
+        table.setRowHeight(30);
+        table.setFont(new Font("명조", Font.BOLD, 15));
+        table.setAlignmentX(0);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        JScrollPane jscrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        jscrollPane.setBounds(26, 150, 300, 400);
+
+        add(jscrollPane);
+
         setVisible(true);
+
+        //JTable 끝--------------------
+
+        // 여기까지 선수리스트 폼 디자인 끝-----------------------------------
     }
 
 
