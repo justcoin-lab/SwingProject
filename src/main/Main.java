@@ -1,13 +1,9 @@
 package main;
 
-import player.PlayerForm;
-
 public class Main {
 
-    public static void main(String[] args) {
+	public static void main(String[] args) {
+		new MainFrame("national team management");
+	}
 
-        new PlayerForm("대한민국 축구팀 관리 프로그램");
-        System.out.println("메인입니다");
-
-    }
 }
