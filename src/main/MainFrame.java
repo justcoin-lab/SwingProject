@@ -1,5 +1,8 @@
 package main;
 
+import match.ResultForm;
+import player.PlayerForm;
+
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
@@ -74,7 +77,19 @@ public class MainFrame extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		Object obj = e.getSource();
 
-		
+		if(obj == btn1) {
+			new MainFrame("national-team management");
+			dispose();
+		} else if (obj == btn2) {
+			new PlayerForm("national-team management");
+			dispose();
+		} else if (obj == btn3) {
+			// new InputForm();
+		} else if (obj == btn4) {
+			new ResultForm("national-team management");
+			dispose();
+		}
 	}
 }
