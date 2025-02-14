@@ -15,7 +15,7 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
     private JLabel position;
     private JLabel injury;
     private JLabel roster;
-    private JLabel comment;*/
+    */
 
     //상위 매뉴 버튼 시작---------------------
     public JButton btn1;
@@ -110,6 +110,7 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
         btn4.setBounds(595, 10, 185, 50);
         btn4.setBackground(new Color(255, 228, 196));
         btn4.setBorderPainted(false);
+        btn4.addActionListener(this);
 
         btn5 = new JButton("구단 일정");
         btn5.setBounds(790, 10, 185, 50);
@@ -142,10 +143,10 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
 
 
         //JTable 시작--------------------
-        /*PlayerList model = new PlayerList;
-        model.setData();*/
+        PlayerList model = new PlayerList();
+        model.setData();
 
-        JTable table = new JTable();
+        JTable table = new JTable(model);
         table.addMouseListener(this);
         table.setRowHeight(30);
         table.setFont(new Font("명조", Font.BOLD, 15));

@@ -1,5 +1,7 @@
 package match;
 
+import player.PlayerForm;
+
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
@@ -97,7 +99,7 @@ public class ResultFrame extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+
 		
 	}
 }
