@@ -22,6 +22,10 @@ public class ResultForm extends JFrame implements ActionListener{
 	public JButton btn3;
 	public JButton btn4;
 	public JButton btn5;
+	public JButton resultInsertBtn;
+	public JButton resultModifyBtn;
+	public JButton resultDeleteBtn;
+
 
 	public ResultForm(String title) {
 		setTitle(title);
@@ -77,12 +81,29 @@ public class ResultForm extends JFrame implements ActionListener{
 		btn5.setBackground(new Color(255, 228, 196));
 		btn5.setBorderPainted(false);
 
+		resultInsertBtn = new JButton("기록 입력");
+		resultInsertBtn.setBounds(870, 80, 100, 50);
+		resultInsertBtn.setBackground(new Color(255, 228, 196));
+		resultInsertBtn.setBorderPainted(false);
+
+		resultModifyBtn = new JButton("기록 수정");
+		resultModifyBtn.setBounds(870, 150, 100, 50);
+		resultModifyBtn.setBackground(new Color(255, 228, 196));
+		resultModifyBtn.setBorderPainted(false);
+
+		resultDeleteBtn = new JButton("기록 삭제");
+		resultDeleteBtn.setBounds(870, 220, 100, 50);
+		resultDeleteBtn.setBackground(new Color(255, 228, 196));
+		resultDeleteBtn.setBorderPainted(false);
+
 		add(btn1);
 		add(btn2);
 		add(btn3);
 		add(btn4);
 		add(btn5);
-		// 여기까지
+		add(resultInsertBtn);
+		add(resultModifyBtn);
+		add(resultDeleteBtn);
 
 		// 경기 결과 리스트 title
 		JLabel mainlbl = new JLabel("최근 경기");
