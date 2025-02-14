@@ -40,6 +40,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		btn1.setBounds(10, 10, 185, 50);
 		btn1.setBackground(new Color(255, 228, 196));
 		btn1.setBorderPainted(false);
+
 		
 		btn2 = new JButton("구단 선수 목록");
 		btn2.setBounds(205, 10, 185, 50);
@@ -50,6 +51,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		btn3.setBounds(400, 10, 185, 50);
 		btn3.setBackground(new Color(255, 228, 196));
 		btn3.setBorderPainted(false);
+
 		
 		btn4 = new JButton("구단 최근 경기");
 		btn4.setBounds(595, 10, 185, 50);
@@ -61,6 +63,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		btn5.setBounds(790, 10, 185, 50);
 		btn5.setBackground(new Color(255, 228, 196));
 		btn5.setBorderPainted(false);
+
 		
 		add(btn1);
 		add(btn2);
@@ -74,15 +77,7 @@ public class MainFrame extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Object obj = e.getSource();
-		
-		if(obj == btn4) {
-			new ResultFrame("national team management");
-			dispose();
-		}else if(obj == btn2) {
-			new PlayerForm("선수명단");
-			dispose();
-		}
+
 		
 	}
 }
