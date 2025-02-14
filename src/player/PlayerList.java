@@ -33,10 +33,10 @@ public class PlayerList extends AbstractTableModel {
     public Object getValueAt(int row, int col) { //row 와 컬럼 데이타 가져오기
         Object value = data.get(row).get(col);
 
-        // "선발여부" 컬럼(마지막 컬럼)에서 값이 "s"이면 "선발"로 변경
-        if (col == 7 && "s".equals(value)) {
+        // "선발여부" 컬럼(마지막 컬럼)에서 값이 "m"이면 "선발"로 변경
+        if (col == 7 && "m".equals(value)) {
             return "선발";
-        }else if(col == 7 && "m".equals(value)) {
+        }else if(col == 7 && "s".equals(value)) {
             return "후보";
         }else if(col == 6 && "0".equals(value)) {
             return "없음";
@@ -58,7 +58,7 @@ public class PlayerList extends AbstractTableModel {
 
     public void setData() {
         Util.init();
-        sql = "SELECT * FROM player";
+        sql = "SELECT * FROM player order by roster asc, decode(position, 'FW', 1, 'MF', 2, 'DF', 3, 4)";
 
         ResultSet rs = Util.getResult(sql);
 
