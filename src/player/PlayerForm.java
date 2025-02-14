@@ -3,6 +3,7 @@ package player;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -46,18 +47,18 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
         panCenter.setOpaque(false);
         panCenter.setBounds(0, 40, 1000, 600);
 
-        JPanel infoListPlayer = new JPanel(); //선수리스트정보 패널
+        /*JPanel infoListPlayer = new JPanel(); //선수리스트정보 패널
         infoListPlayer.setBackground(new Color(0xEDEDED));
-        infoListPlayer.setBounds(10, 150, 300, 400);
-        infoListPlayer.setBorder(new TitledBorder(new LineBorder(Color.LIGHT_GRAY,1)));
+        infoListPlayer.setBounds(10, 150, 400, 400);
+        infoListPlayer.setBorder(new TitledBorder(new LineBorder(Color.LIGHT_GRAY,1)));*/
 
         JPanel infoPlayerPanel = new JPanel(); //선수정보 패널
         infoPlayerPanel.setBackground(new Color(0xEDEDED));
-        infoPlayerPanel.setBounds(370, 150, 500, 400);
+        infoPlayerPanel.setBounds(470, 150, 400, 400);
         infoPlayerPanel.setBorder(new TitledBorder(new LineBorder(Color.LIGHT_GRAY,1)));
 
         add(panCenter);
-        add(infoListPlayer);
+        // add(infoListPlayer);
         add(infoPlayerPanel);
         //화면별 구분선 끝---------------------------
 
@@ -149,17 +150,65 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
         JTable table = new JTable(model);
         table.addMouseListener(this);
         table.setRowHeight(30);
-        table.setFont(new Font("명조", Font.BOLD, 15));
+        table.setFont(new Font("명조", Font.BOLD, 10));
         table.setAlignmentX(0);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        JScrollPane jscrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-                JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        jscrollPane.setBounds(26, 150, 300, 400);
+        // 자동 크기 조정 비활성화 (가로 스크롤 활성화)
+        //table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+
+        // 선수 내용 가운데 정렬
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
+
+        //컬럼 헤드 설정
+        table.getTableHeader().setFont(new Font("맑은 고딕", Font.BOLD, 10));
+
+        // 헤더 가운데 정렬
+        DefaultTableCellRenderer headerRenderer = (DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer();
+        headerRenderer.setHorizontalAlignment(JLabel.CENTER);
+
+        //컬럼 너비 고정
+        table.getColumnModel().getColumn(0).setPreferredWidth(20);
+        table.getColumnModel().getColumn(1).setPreferredWidth(30);
+        table.getColumnModel().getColumn(2).setPreferredWidth(20);
+        table.getColumnModel().getColumn(3).setPreferredWidth(20);
+        table.getColumnModel().getColumn(4).setPreferredWidth(20);
+        table.getColumnModel().getColumn(5).setPreferredWidth(20);
+        table.getColumnModel().getColumn(6).setPreferredWidth(30);
+        table.getColumnModel().getColumn(7).setPreferredWidth(30);
+
+
+        JScrollPane jscrollPane = new JScrollPane(table);
+        jscrollPane.setBounds(60, 150, 400, 400);
+        jscrollPane.setBorder(new TitledBorder(new LineBorder(Color.LIGHT_GRAY,1)));
+
+// 스크롤 정책 설정
+        jscrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        jscrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+// 테이블 헤더 설정
+        table.getTableHeader().setReorderingAllowed(false);
+        table.getTableHeader().setResizingAllowed(false);
 
         add(jscrollPane);
 
+// 컴포넌트 갱신
+      /*  SwingUtilities.invokeLater(() -> {
+            model.fireTableDataChanged();
+            table.repaint();
+            jscrollPane.revalidate();
+            jscrollPane.repaint();
+        });*/
+
         setVisible(true);
+
 
         //JTable 끝--------------------
 
