@@ -3,13 +3,11 @@ package player;
 import db.Util;
 
 import javax.swing.table.AbstractTableModel;
-import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Vector;
+import java.util.List;
 
 public class PlayerList extends AbstractTableModel {
 
@@ -35,10 +33,10 @@ public class PlayerList extends AbstractTableModel {
     public Object getValueAt(int row, int col) { //row 와 컬럼 데이타 가져오기
         Object value = data.get(row).get(col);
 
-        // "선발여부" 컬럼(마지막 컬럼)에서 값이 "s"이면 "선발"로 변경
-        if (col == 7 && "s".equals(value)) {
+        // "선발여부" 컬럼(마지막 컬럼)에서 값이 "m"이면 "선발"로 변경
+        if (col == 7 && "m".equals(value)) {
             return "선발";
-        }else if(col == 7 && "m".equals(value)) {
+        }else if(col == 7 && "s".equals(value)) {
             return "후보";
         }else if(col == 6 && "0".equals(value)) {
             return "없음";
@@ -60,9 +58,10 @@ public class PlayerList extends AbstractTableModel {
 
     public void setData() {
         Util.init();
-        sql = "SELECT * FROM player";
+        sql = "SELECT * FROM player order by roster asc, decode(position, 'FW', 1, 'MF', 2, 'DF', 3, 4)";
 
         ResultSet rs = Util.getResult(sql);
+
 
         // 기존 데이터 클리어
         data.clear();
@@ -102,7 +101,6 @@ public class PlayerList extends AbstractTableModel {
     }
 
     public static String[][] getPlayers2() {
-
         try {
             Util.init();
             ResultSet rs = Util.getResult("SELECT * FROM player");
@@ -129,7 +127,30 @@ public class PlayerList extends AbstractTableModel {
             return new String[0][0];
 
         }
-
     }
 
+    // 플레이어 리스트 반환
+    public static List<PlayerDto> getPlayerList() {
+        List<PlayerDto> playerList = new ArrayList<>();
+        try {
+            Util.init();
+            ResultSet rs = Util.getResult("SELECT * FROM player");
+
+            while (rs.next()) {
+                int pn = rs.getInt("pn");
+                String name = rs.getString("name");
+                int age = rs.getInt("age");
+                int height = rs.getInt("height");
+                int weight = rs.getInt("weight");
+                String position = rs.getString("position");
+                String injury = rs.getString("injury");
+                String roster = rs.getString("roster");
+
+                PlayerDto player = new PlayerDto(pn, name, age, height, weight, position, injury, roster);
+                playerList.add(player);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } return playerList;
+    }
 }

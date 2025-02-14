@@ -1,17 +1,19 @@
 package match;
 
+import java.util.Date;
+
 public class MatchDto {
 
 	private String matchName;
-	private String matchDate;
+	private Date matchDate;
 	private String opposing;
 	private int ourScore;
 	private int oppScore;
 	private int yellowCard;
 	private int redCard;
-	private int mvp;
+	private String mvp;
 	
-	public MatchDto(String matchName, String matchDate, String opposing, int ourScore, int oppScore, int yellowCard, int redCard, int mvp) {
+	public MatchDto(String matchName, Date matchDate, String opposing, int ourScore, int oppScore, int yellowCard, int redCard, String mvp) {
 		this.matchName = matchName;
 		this.matchDate = matchDate;
 		this.opposing = opposing;
@@ -28,10 +30,10 @@ public class MatchDto {
 	public void setMatchName(String matchName) {
 		this.matchName = matchName;
 	}
-	public String getMatchDate() {
+	public Date getMatchDate() {
 		return matchDate;
 	}
-	public void setMatchDate(String matchDate) {
+	public void setMatchDate(Date matchDate) {
 		this.matchDate = matchDate;
 	}
 	public String getOpposing() {
@@ -64,10 +66,10 @@ public class MatchDto {
 	public void setRedCard(int redCard) {
 		this.redCard = redCard;
 	}
-	public int getMvp() {
+	public String getMvp() {
 		return mvp;
 	}
-	public void setMvp(int mvp) {
+	public void setMvp(String mvp) {
 		this.mvp = mvp;
 	}
 	
