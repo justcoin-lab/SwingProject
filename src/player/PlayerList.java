@@ -3,13 +3,11 @@ package player;
 import db.Util;
 
 import javax.swing.table.AbstractTableModel;
-import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Vector;
+import java.util.List;
 
 public class PlayerList extends AbstractTableModel {
 
@@ -63,7 +61,7 @@ public class PlayerList extends AbstractTableModel {
         sql = "SELECT * FROM player";
 
         ResultSet rs = Util.getResult(sql);
-import java.util.List;
+
 
         // 기존 데이터 클리어
         data.clear();
@@ -103,27 +101,13 @@ import java.util.List;
     }
 
     public static String[][] getPlayers2() {
-public class PlayerList {
-
-    // 플레이어 리스트 반환
-    public static List<PlayerDto> getPlayerList() {
-        List<PlayerDto> playerList = new ArrayList<>();
         try {
             Util.init();
             ResultSet rs = Util.getResult("SELECT * FROM player");
 
             ArrayList<String[]> playerList = new ArrayList<>();
-            ResultSet rs = Util.getResult("select * from player");
 
             while (rs.next()) {
-                int pn = rs.getInt("pn");
-                String name = rs.getString("name");
-                int age = rs.getInt("age");
-                int height = rs.getInt("height");
-                int weight = rs.getInt("weight");
-                String position = rs.getString("position");
-                String injury = rs.getString("injury");
-                String roster = rs.getString("roster");
 
                 playerList.add(new String[]{
                         String.valueOf(rs.getInt("pn")),
@@ -136,18 +120,37 @@ public class PlayerList {
                         rs.getString("roster"),
                 });
 
-                PlayerDto player = new PlayerDto(pn, name, age, height, weight, position, injury, roster);
-                playerList.add(player);
             }
             return playerList.toArray(new String[playerList.size()][]);
         } catch (SQLException e) {
-        } catch (Exception e) {
             e.printStackTrace();
             return new String[0][0];
 
         }
-
-        return playerList;
     }
 
+    // 플레이어 리스트 반환
+    public static List<PlayerDto> getPlayerList() {
+        List<PlayerDto> playerList = new ArrayList<>();
+        try {
+            Util.init();
+            ResultSet rs = Util.getResult("SELECT * FROM player");
+
+            while (rs.next()) {
+                int pn = rs.getInt("pn");
+                String name = rs.getString("name");
+                int age = rs.getInt("age");
+                int height = rs.getInt("height");
+                int weight = rs.getInt("weight");
+                String position = rs.getString("position");
+                String injury = rs.getString("injury");
+                String roster = rs.getString("roster");
+
+                PlayerDto player = new PlayerDto(pn, name, age, height, weight, position, injury, roster);
+                playerList.add(player);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } return playerList;
+    }
 }
