@@ -9,7 +9,7 @@ import db.Util;
 import player.PlayerDto;
 import player.PlayerList;
 
-public class MatchResultList {
+public class ResultList {
 
     // 경기 기록 리스트 출력
     public static List<MatchDto> getMatchResultList() {

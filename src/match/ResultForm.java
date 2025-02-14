@@ -13,7 +13,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-public class ResultFrame extends JFrame implements ActionListener{
+public class ResultForm extends JFrame implements ActionListener{
 	public JPanel mainSpace;
 	public JPanel listInfo;
 	public JPanel mvpInfo;
@@ -23,7 +23,7 @@ public class ResultFrame extends JFrame implements ActionListener{
 	public JButton btn4;
 	public JButton btn5;
 
-	public ResultFrame(String title) {
+	public ResultForm(String title) {
 		setTitle(title);
 		setSize(1000, 600);
 		setLocation(460, 240);
@@ -92,7 +92,7 @@ public class ResultFrame extends JFrame implements ActionListener{
 		mainlbl.setBackground(new Color(255, 255, 240));
 		add(mainlbl);
 
-		List<MatchDto> matchResult = MatchResultList.getMatchResultList();
+		List<MatchDto> matchResult = ResultList.getMatchResultList();
 
 		// 컬럼 이름 지정
 		String[] columnNames = {"매치", "날짜", "상대팀", "득점", "실점", "경고", "퇴장", "MVP"};

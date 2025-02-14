@@ -9,9 +9,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import match.ResultFrame;
-import player.PlayerForm;
-
 public class MainFrame extends JFrame implements ActionListener{
 	
 	public JPanel mainSpace;
