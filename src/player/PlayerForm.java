@@ -65,7 +65,7 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
 
         //--선수리스트 라벨 시작---------------------
         JLabel playerList = new JLabel("선수 리스트 검색");
-        playerList.setBounds(50, 120, 100, 20);
+        playerList.setBounds(60, 120, 100, 20);
         playerList.setOpaque(true);
         playerList.setBackground(new Color(0xEDEDED));
         add(playerList);
@@ -73,7 +73,7 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
 
         //--선수정보 라벨 시작---------------------
         JLabel playerInfo = new JLabel("선수 정보");
-        playerInfo.setBounds(580, 120, 80, 20);
+        playerInfo.setBounds(630, 120, 80, 20);
         playerList.setOpaque(true);
         playerList.setBackground(new Color(0xEDEDED));
         add(playerInfo);
@@ -82,7 +82,7 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
         //선수 리스트 검색창
 
         JTextField playerSearch = new JTextField();
-        playerSearch.setBounds(150, 120, 170, 20);
+        playerSearch.setBounds(160, 120, 170, 20);
         playerSearch.addKeyListener(this);
         add(playerSearch);
 
