@@ -287,7 +287,7 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
         try {
             // 절대 경로 사용
             String projectPath = System.getProperty("user.dir");
-            String imagePath = projectPath + File.separator + "images" + File.separator + playerName + ".png";
+            String imagePath = projectPath + File.separator + "images" + File.separator + playerName + ".jpg";
             File imageFile = new File(imagePath);
 
             if (imageFile.exists()) {
