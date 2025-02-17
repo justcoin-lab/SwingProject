@@ -1,8 +1,13 @@
 package player;
 
 import db.Util;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -34,6 +39,10 @@ public class PlayerUpdateDialog extends JDialog {
     private String injury;
     private String roster;
 
+    private JButton btnSelectImage;
+    private JLabel imagePreview;
+    private File selectImageFile;
+
 
 
     public PlayerUpdateDialog(PlayerDto player, PlayerForm parent) {
@@ -48,7 +57,7 @@ public class PlayerUpdateDialog extends JDialog {
         this.parentForm = parent;
 
         // 다이얼로그 기본 설정
-        setSize(400, 500);
+        setSize(400, 600);
         setLocationRelativeTo(parent);
         setLayout(new GridBagLayout());
 
@@ -75,6 +84,16 @@ public class PlayerUpdateDialog extends JDialog {
         cbInjury = new JComboBox<>(new String[]{"없음", "부상중"});
         cbRoster = new JComboBox<>(new String[]{"선발", "후보"});
 
+
+        // 이미지 관련 컴포넌트 초기화 - 여기에 추가
+        imagePreview = new JLabel();
+        imagePreview.setPreferredSize(new Dimension(150, 180));
+        imagePreview.setBorder(BorderFactory.createEtchedBorder());
+        imagePreview.setHorizontalAlignment(JLabel.CENTER);
+        imagePreview.setText("이미지 미리보기");
+
+        btnSelectImage = new JButton("사진 선택");
+
         //버튼 초기화
         btnUpdate = new JButton("선수정보 Update 확인");
         btnCancel = new JButton("취소");
@@ -82,6 +101,11 @@ public class PlayerUpdateDialog extends JDialog {
     }
 
     private void setupLayout(GridBagConstraints gbc) {
+
+        // GridBagConstraints 기본 설정
+        gbc.fill = GridBagConstraints.HORIZONTAL;  // 수평으로 채우기
+        gbc.insets = new Insets(5, 5, 5, 5);      // 여백 설정
+
         addFormField(gbc, "백넘버", tfPn, 0);
         addFormField(gbc, "이름", tfName, 1);
         addFormField(gbc, "나이", tfAge, 2);
@@ -91,15 +115,34 @@ public class PlayerUpdateDialog extends JDialog {
         addFormField(gbc, "부상여부", cbInjury, 6);
         addFormField(gbc, "선발여부", cbRoster, 7);
 
+        // 이미지 미리보기와 버튼 배치
+        JPanel imagePanel = new JPanel(new BorderLayout(5, 5));
+        imagePanel.add(imagePreview, BorderLayout.CENTER);
+        imagePanel.add(btnSelectImage, BorderLayout.SOUTH);
+
+        gbc.gridx = 0;
+        gbc.gridy = 8;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.BOTH;
+        add(imagePanel, gbc);
+
+
+
         //버튼 패널 설정
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.add(btnUpdate);
         buttonPanel.add(btnCancel);
 
         gbc.gridx = 0;
-        gbc.gridy = 8;
+        gbc.gridy = 9;
         gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.BOTH;
+
         add(buttonPanel, gbc);
+
+
+
+
     }
 
     private void addFormField(GridBagConstraints gbc, String labelText, JComponent component, int row) {
@@ -127,7 +170,7 @@ public class PlayerUpdateDialog extends JDialog {
         cbRoster.setSelectedItem("m".equals(currentPlayer.getRoster()) ? "선발":"후보");
 
         //백넘버는 수정 불가능하게 설정
-        //tfPn.setEditable(false);
+        tfName.setEditable(false);
 
     }
 
@@ -138,6 +181,34 @@ public class PlayerUpdateDialog extends JDialog {
                 updatePlayerInfo();
             }
         });
+
+
+                    btnSelectImage.addActionListener(e1 -> {
+
+                        JFileChooser fileChooser = new JFileChooser();
+                        fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter(
+                                "이미지파일", "jpg", "jpeg", "png", "gif"));
+                        int result = fileChooser.showOpenDialog(this);
+                        if (result == JFileChooser.APPROVE_OPTION) {
+                            selectImageFile = fileChooser.getSelectedFile();
+                            try {
+                                //선택된 이미지를 미리보기에 표시
+                                BufferedImage originalImage = ImageIO.read(selectImageFile);
+                                Image scaledImage = originalImage.getScaledInstance(150, 180, Image.SCALE_SMOOTH);
+                                ImageIcon icon = new ImageIcon(scaledImage);
+
+                                imagePreview.setIcon(icon);
+                                imagePreview.setText("");
+                            } catch (IOException ex) {
+                                JOptionPane.showMessageDialog(this,
+                                        "이미지 로드중 오류가 발생했습니다: " + ex.getMessage());
+                                imagePreview.setIcon(null);
+                                imagePreview.setText("이미지 로드 실패");
+                            }
+                        }
+                    });
+
+
 
         // 취소 버튼 이벤트
         btnCancel.addActionListener(e -> dispose());
@@ -237,6 +308,26 @@ public class PlayerUpdateDialog extends JDialog {
             int result = pstmt.executeUpdate();
 
             if (result > 0) {
+                // 이미지 파일이 선택되었다면 저장
+                if(selectImageFile != null) {
+                    try {
+                        //이미지를 프로젝트의 images 폴더에 선수 이름 저장
+                        String projectPath = System.getProperty("user.dir");
+                        String targetPath = projectPath +File.separator + "images"
+                                + File.separator
+                                + tfName.getText() + ".jpg";
+                        //원본 이미지 읽기
+                        BufferedImage originalImage = ImageIO.read(selectImageFile);
+
+                        //이미지 저장(jpg 형식으로)
+                        File targetFile = new File(targetPath);
+                        ImageIO.write(originalImage, "jpg", targetFile);
+                        System.out.println("이미지가 성공적으로 저장되었습니다" +targetPath);
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(this,
+                                "이미지 저장 오류가 발생했습니다: " + e.getMessage());
+                    }
+                }
                 JOptionPane.showMessageDialog(this, "선수 정보가 성공적으로 수정되었습니다.");
                 // 부모 폼의 테이블 데이터 갱신
                 ((PlayerList)parentForm.getTable().getModel()).setData();
