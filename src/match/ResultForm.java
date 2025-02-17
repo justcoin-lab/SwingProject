@@ -67,16 +67,19 @@ public class ResultForm extends JFrame implements ActionListener {
 		btn1.setBounds(10, 10, 185, 50);
 		btn1.setBackground(new Color(255, 228, 196));
 		btn1.setBorderPainted(false);
+		btn1.addActionListener(this);
 
 		btn2 = new JButton("구단 선수 목록");
 		btn2.setBounds(205, 10, 185, 50);
 		btn2.setBackground(new Color(255, 228, 196));
 		btn2.setBorderPainted(false);
+		btn2.addActionListener(this);
 
 		btn3 = new JButton("선수 입력");
 		btn3.setBounds(400, 10, 185, 50);
 		btn3.setBackground(new Color(255, 228, 196));
 		btn3.setBorderPainted(false);
+		btn3.addActionListener(this);
 
 		btn4 = new JButton("구단 최근 경기");
 		btn4.setBounds(595, 10, 185, 50);
@@ -88,6 +91,7 @@ public class ResultForm extends JFrame implements ActionListener {
 		btn5.setBounds(790, 10, 185, 50);
 		btn5.setBackground(new Color(255, 228, 196));
 		btn5.setBorderPainted(false);
+		btn5.addActionListener(this);
 
 		resultInsertBtn = new JButton("기록 입력");
 		resultInsertBtn.setBounds(870, 80, 100, 50);
