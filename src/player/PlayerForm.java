@@ -1,5 +1,9 @@
 package player;
 
+import main.MainFrame;
+import match.ResultForm;
+import schedule.ScheduleForm;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -283,7 +287,7 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
         try {
             // 절대 경로 사용
             String projectPath = System.getProperty("user.dir");
-            String imagePath = projectPath + File.separator + "images" + File.separator + playerName + ".png";
+            String imagePath = projectPath + File.separator + "images" + File.separator + playerName + ".jpg";
             File imageFile = new File(imagePath);
 
             if (imageFile.exists()) {
@@ -328,25 +332,11 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
 
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-
-    }
-
+    public void keyTyped(KeyEvent e) {}
     @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
+    public void keyPressed(KeyEvent e) {}
     @Override
-    public void keyPressed(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
-
+    public void keyReleased(KeyEvent e) {}
     @Override
     public void mouseClicked(MouseEvent e) {
         if (e.getSource() == table) {
@@ -359,22 +349,32 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
+    public void mousePressed(MouseEvent e) {}
+    @Override
+    public void mouseReleased(MouseEvent e) {}
+    @Override
+    public void mouseEntered(MouseEvent e) {}
+    @Override
+    public void mouseExited(MouseEvent e) {}
 
     @Override
-    public void mouseReleased(MouseEvent e) {
+    public void actionPerformed(ActionEvent e) {
+        Object obj = e.getSource();
 
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
+        if(obj == btn1) {
+            new MainFrame("national-team management");
+            dispose();
+        } else if (obj == btn2) {
+            new PlayerForm("national-team management");
+            dispose();
+        } else if (obj == btn3) {
+            // new InputForm();
+        } else if (obj == btn4) {
+            new ResultForm("national-team management");
+            dispose();
+        } else if (obj == btn5) {
+            new ScheduleForm("national-team management");
+            dispose();
+        }
     }
 }

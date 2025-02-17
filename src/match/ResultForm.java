@@ -1,8 +1,15 @@
 package match;
 
+import main.MainFrame;
+import player.PlayerDto;
+import player.PlayerForm;
+import schedule.ScheduleForm;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -13,10 +20,11 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-public class ResultForm extends JFrame implements ActionListener{
+public class ResultForm extends JFrame implements ActionListener {
 	public JPanel mainSpace;
 	public JPanel listInfo;
 	public JPanel mvpInfo;
+	public JPanel mvpDataPanel;
 	public JButton btn1;
 	public JButton btn2;
 	public JButton btn3;
@@ -85,6 +93,7 @@ public class ResultForm extends JFrame implements ActionListener{
 		resultInsertBtn.setBounds(870, 80, 100, 50);
 		resultInsertBtn.setBackground(new Color(255, 228, 196));
 		resultInsertBtn.setBorderPainted(false);
+		resultInsertBtn.addActionListener(this);
 
 		resultModifyBtn = new JButton("기록 수정");
 		resultModifyBtn.setBounds(870, 150, 100, 50);
@@ -158,6 +167,17 @@ public class ResultForm extends JFrame implements ActionListener{
 			column.setPreferredWidth(width + 10); // 여백을 주기 위해 +10
 		}
 
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int row = table.getSelectedRow(); // 클릭 행 가져오기
+				if(row != -1) { // 선택 확인
+					String mvpName = (String) table.getValueAt(row, 7);
+					MvpInfo(mvpName);
+                }
+			}
+		});
+
 		JScrollPane jsp1 = new JScrollPane(table);
 		jsp1.setBounds(30, 90, 520, 440);
 		add(jsp1);
@@ -170,7 +190,9 @@ public class ResultForm extends JFrame implements ActionListener{
 		mvplbl.setBackground(new Color(255, 255, 240));
 		add(mvplbl);
 
-
+		mvpDataPanel = new JPanel();
+		mvpDataPanel.setBounds(600, 100, 240, 420);
+		add(mvpDataPanel);
 
 		add(listInfo);
 		add(mvpInfo);
@@ -179,8 +201,89 @@ public class ResultForm extends JFrame implements ActionListener{
 		setVisible(true);
 	}
 
+	// mvpInfo 업데이트
+	public void MvpInfo(String mvpName) {
+		mvpDataPanel.removeAll(); // 업데이트를 위한 초기화
+		mvpDataPanel.setLayout(new GridBagLayout());
+		mvpDataPanel.setBackground(new Color(255, 255, 240));
+		GridBagConstraints gbc = new GridBagConstraints();
+
+		PlayerDto mvpPlayer = ResultList.getMvpPlayer(mvpName);
+
+		if (mvpPlayer != null) {
+			// 선수 사진
+			JLabel photolbl = new JLabel();
+			ImageIcon playerImage = new ImageIcon("images/" + mvpPlayer.getName() + ".jpg");
+			Image img = playerImage.getImage().getScaledInstance(180, 180, Image.SCALE_SMOOTH);
+			photolbl.setIcon(new ImageIcon(img));
+
+			// 선수 사진과 선수 정보와의 간격 조절
+			gbc.gridx = 0;
+			gbc.gridy = 0;
+			gbc.insets = new Insets(10, 0, 20, 0); // 사진 bottom 여백 20px
+			gbc.anchor = GridBagConstraints.CENTER;
+			mvpDataPanel.add(photolbl, gbc);
+			// -- 여기까지
+
+			// 선수 정보
+			String[] labels = {
+					"이름 : " + mvpPlayer.getName(),
+					"나이 : " + mvpPlayer.getAge(),
+					"키 : " + mvpPlayer.getHeight() + "cm",
+					"몸무게 : " + mvpPlayer.getWeight() + "kg",
+					"포지션 : " + mvpPlayer.getPosition()
+			};
+
+			for (int i = 0; i < labels.length; i++) {
+				JLabel label = new JLabel(labels[i]);
+				label.setFont(new Font("맑은 고딕", Font.PLAIN, 13));
+				label.setHorizontalAlignment(SwingConstants.CENTER);
+
+				gbc.gridy = i + 1; // 사진 아래로 순서대로 추가
+				gbc.insets = new Insets(5, 0, 5, 0); // top, bottom 간격 5px
+				mvpDataPanel.add(label, gbc);
+			}
+		} else {
+			// MVP 정보가 없을 때 정보없음 메시지
+			JLabel notfoundlbl = new JLabel("해당 경기 MVP 정보가 없습니다.");
+			notfoundlbl.setFont(new Font("맑은 고딕", Font.BOLD, 14));
+			notfoundlbl.setForeground(Color.RED);
+			notfoundlbl.setHorizontalAlignment(SwingConstants.CENTER);
+
+			gbc.gridy = 0;
+			gbc.insets = new Insets(10, 0, 10, 0);
+			mvpDataPanel.add(notfoundlbl, gbc);
+		}
+
+		mvpDataPanel.revalidate();
+		mvpDataPanel.repaint();
+	}
+
+
+
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		Object obj = e.getSource();
 
+		if(obj == btn1) {
+			new MainFrame("national-team management");
+			dispose();
+		} else if (obj == btn2) {
+			new PlayerForm("national-team management");
+			dispose();
+		} else if (obj == btn3) {
+			// new InputForm();
+		} else if (obj == btn4) {
+			new ResultForm("national-team management");
+			dispose();
+		} else if (obj == btn5) {
+			new ScheduleForm("national-team management");
+			dispose();
+		}
+
+		if(obj == resultInsertBtn) {
+			new JOptionPane().createDialog("title");
+		}
 	}
 }
