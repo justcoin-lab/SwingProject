@@ -1,5 +1,9 @@
 package player;
 
+import main.MainFrame;
+import match.ResultForm;
+import schedule.ScheduleForm;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
@@ -142,7 +146,6 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
         //사이드 버튼 끝-----------
 
 
-
         //JTable 시작--------------------
         PlayerList model = new PlayerList();
         model.setData();
@@ -157,7 +160,6 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
         // 자동 크기 조정 비활성화 (가로 스크롤 활성화)
         //table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-
         // 선수 내용 가운데 정렬
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -165,7 +167,6 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
         for (int i = 0; i < table.getColumnCount(); i++) {
             table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
-
 
         //컬럼 헤드 설정
         table.getTableHeader().setFont(new Font("맑은 고딕", Font.BOLD, 10));
@@ -183,7 +184,6 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
         table.getColumnModel().getColumn(5).setPreferredWidth(20);
         table.getColumnModel().getColumn(6).setPreferredWidth(30);
         table.getColumnModel().getColumn(7).setPreferredWidth(30);
-
 
         JScrollPane jscrollPane = new JScrollPane(table);
         jscrollPane.setBounds(60, 150, 400, 400);
@@ -208,56 +208,45 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
         });*/
 
         setVisible(true);
-
-
         //JTable 끝--------------------
 
         // 여기까지 선수리스트 폼 디자인 끝-----------------------------------
     }
-
+    @Override
+    public void keyTyped(KeyEvent e) {}
+    @Override
+    public void keyPressed(KeyEvent e) {}
+    @Override
+    public void keyReleased(KeyEvent e) {}
+    @Override
+    public void mouseClicked(MouseEvent e) {}
+    @Override
+    public void mousePressed(MouseEvent e) {}
+    @Override
+    public void mouseReleased(MouseEvent e) {}
+    @Override
+    public void mouseEntered(MouseEvent e) {}
+    @Override
+    public void mouseExited(MouseEvent e) {}
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        Object obj = e.getSource();
 
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
+        if(obj == btn1) {
+            new MainFrame("national-team management");
+            dispose();
+        } else if (obj == btn2) {
+            new PlayerForm("national-team management");
+            dispose();
+        } else if (obj == btn3) {
+            // new InputForm();
+        } else if (obj == btn4) {
+            new ResultForm("national-team management");
+            dispose();
+        } else if (obj == btn5) {
+            new ScheduleForm("national-team management");
+            dispose();
+        }
     }
 }
