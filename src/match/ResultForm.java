@@ -1,8 +1,15 @@
 package match;
 
+import main.MainFrame;
+import player.PlayerDto;
+import player.PlayerForm;
+import schedule.ScheduleForm;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -13,10 +20,11 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
-public class ResultForm extends JFrame implements ActionListener{
+public class ResultForm extends JFrame implements ActionListener {
 	public JPanel mainSpace;
 	public JPanel listInfo;
 	public JPanel mvpInfo;
+	public JPanel mvpDataPanel;
 	public JButton btn1;
 	public JButton btn2;
 	public JButton btn3;
@@ -85,6 +93,7 @@ public class ResultForm extends JFrame implements ActionListener{
 		resultInsertBtn.setBounds(870, 80, 100, 50);
 		resultInsertBtn.setBackground(new Color(255, 228, 196));
 		resultInsertBtn.setBorderPainted(false);
+		resultInsertBtn.addActionListener(this);
 
 		resultModifyBtn = new JButton("기록 수정");
 		resultModifyBtn.setBounds(870, 150, 100, 50);
@@ -158,6 +167,17 @@ public class ResultForm extends JFrame implements ActionListener{
 			column.setPreferredWidth(width + 10); // 여백을 주기 위해 +10
 		}
 
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int row = table.getSelectedRow(); // 클릭 행 가져오기
+				if(row != -1) { // 선택 확인
+					String mvpName = (String) table.getValueAt(row, 7);
+					MvpInfo(mvpName);
+                }
+			}
+		});
+
 		JScrollPane jsp1 = new JScrollPane(table);
 		jsp1.setBounds(30, 90, 520, 440);
 		add(jsp1);
@@ -170,7 +190,9 @@ public class ResultForm extends JFrame implements ActionListener{
 		mvplbl.setBackground(new Color(255, 255, 240));
 		add(mvplbl);
 
-
+		mvpDataPanel = new JPanel();
+		mvpDataPanel.setBounds(600, 100, 240, 420);
+		add(mvpDataPanel);
 
 		add(listInfo);
 		add(mvpInfo);
@@ -179,8 +201,79 @@ public class ResultForm extends JFrame implements ActionListener{
 		setVisible(true);
 	}
 
+	// mvpInfo 업데이트
+	public void MvpInfo(String mvpName) {
+		mvpDataPanel.removeAll(); // 클릭 시 업데이트를 위한 초기화
+		mvpDataPanel.setLayout(new BorderLayout()); // 전체 패널 레이아웃 설정
+
+		PlayerDto mvpPlayer = ResultList.getMvpPlayer(mvpName);
+
+		if (mvpPlayer != null) {
+			// 맨 처음 선수 사진
+			JLabel photolbl = new JLabel();
+			photolbl.setHorizontalAlignment(SwingConstants.CENTER);
+			ImageIcon playerImage = new ImageIcon("images/" + mvpPlayer.getName() + ".jpg"); // 선수 사진 경로 설정
+			Image img = playerImage.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH); // 사진 크기 조정
+			photolbl.setIcon(new ImageIcon(img));
+			mvpDataPanel.add(photolbl, BorderLayout.NORTH); // 사진을 맨 위에 배치
+
+			// 선수 정보
+			JPanel infoPanel = new JPanel(new GridLayout(5, 1, 5, 5)); // 5행 1열, 간격 조정
+			infoPanel.setBackground(new Color(255, 255, 240));
+
+			JLabel namelbl = new JLabel("이름 : " + mvpPlayer.getName());
+			JLabel agelbl = new JLabel("나이 : " + mvpPlayer.getAge());
+			JLabel heightlbl = new JLabel("키 : " + mvpPlayer.getHeight() + "cm");
+			JLabel weightlbl = new JLabel("몸무게 : " + mvpPlayer.getWeight() + "kg");
+			JLabel positionlbl = new JLabel("포지션 : " + mvpPlayer.getPosition());
+
+			namelbl.setHorizontalAlignment(SwingConstants.CENTER);
+			agelbl.setHorizontalAlignment(SwingConstants.CENTER);
+			heightlbl.setHorizontalAlignment(SwingConstants.CENTER);
+			weightlbl.setHorizontalAlignment(SwingConstants.CENTER);
+			positionlbl.setHorizontalAlignment(SwingConstants.CENTER);
+
+			infoPanel.add(namelbl);
+			infoPanel.add(agelbl);
+			infoPanel.add(heightlbl);
+			infoPanel.add(weightlbl);
+			infoPanel.add(positionlbl);
+
+			mvpDataPanel.add(infoPanel, BorderLayout.CENTER); // 정보 패널을 중앙에 배치
+		} else {
+			JLabel notfoundlbl = new JLabel("해당 경기 MVP 정보가 없습니다.");
+			notfoundlbl.setHorizontalAlignment(SwingConstants.CENTER);
+			mvpDataPanel.add(notfoundlbl, BorderLayout.CENTER);
+		}
+
+		mvpDataPanel.revalidate();
+		mvpDataPanel.repaint();
+	}
+
+
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		Object obj = e.getSource();
 
+		if(obj == btn1) {
+			new MainFrame("national-team management");
+			dispose();
+		} else if (obj == btn2) {
+			new PlayerForm("national-team management");
+			dispose();
+		} else if (obj == btn3) {
+			// new InputForm();
+		} else if (obj == btn4) {
+			new ResultForm("national-team management");
+			dispose();
+		} else if (obj == btn5) {
+			new ScheduleForm("national-team management");
+			dispose();
+		}
+
+		if(obj == resultInsertBtn) {
+			new JOptionPane().createDialog("title");
+		}
 	}
 }
