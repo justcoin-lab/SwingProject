@@ -106,6 +106,7 @@ public class ResultForm extends JFrame implements ActionListener {
 		resultModifyBtn.setBounds(870, 150, 100, 50);
 		resultModifyBtn.setBackground(new Color(255, 228, 196));
 		resultModifyBtn.setBorderPainted(false);
+		resultModifyBtn.addActionListener(this);
 
 		resultDeleteBtn = new JButton("기록 삭제");
 		resultDeleteBtn.setBounds(870, 220, 100, 50);
