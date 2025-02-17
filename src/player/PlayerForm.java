@@ -140,6 +140,15 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
         btn6.setBounds(880, 200, 90, 50);
         btn6.setBackground(new Color(0x476EC5));
         btn6.setBorderPainted(false);
+        btn6.addActionListener(this); // ★ 이 코드 추가
+
+        /*btn6 = new JButton("업데이트");
+        btn6.setBounds(880, 200, 90, 50);
+        btn6.setBackground(new Color(0x476EC5));
+        btn6.setBorderPainted(false);
+
+        add(btn6);*/
+
 
         btn7 = new JButton("방출");
         btn7.setBounds(880, 400, 90, 50);
@@ -327,10 +336,40 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
     }
 
 
+
+    public JTable getTable() {
+        return table;
+    }
+
+
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == btn6) {  // e.getSource()는 이벤트 발생 객체를 가져옴
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "수정할 선수를 선택해주세요.");
+                return;
+            }
 
+            // 선택된 선수 정보 가져오기
+            int pn = Integer.parseInt(table.getValueAt(selectedRow, 0).toString());
+            String name = table.getValueAt(selectedRow, 1).toString();
+            int age = Integer.parseInt(table.getValueAt(selectedRow, 2).toString());
+            int height = Integer.parseInt(table.getValueAt(selectedRow, 3).toString());
+            int weight = Integer.parseInt(table.getValueAt(selectedRow, 4).toString());
+            String position = table.getValueAt(selectedRow, 5).toString();
+            String injury = table.getValueAt(selectedRow, 6).toString();
+            String roster = table.getValueAt(selectedRow, 7).toString();
+
+            // PlayerDto 객체 생성
+            PlayerDto player = new PlayerDto(pn, name, age, height, weight, position, injury, roster);
+
+            // PlayerUpdateDialog 창 열기 (PlayerForm을 부모 창으로 전달)
+            PlayerUpdateDialog updateForm = new PlayerUpdateDialog(player, this);
+            updateForm.setVisible(true);
+        }
     }
+
 
     @Override
     public void keyTyped(KeyEvent e) {
