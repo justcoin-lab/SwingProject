@@ -7,6 +7,9 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -38,6 +41,7 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
     public JButton btn7;
 
     private JTable table;
+    JTextField playerSearch;
     //상위 매뉴 버튼 시작---------------------
 
 
@@ -93,7 +97,7 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
 
         //선수 리스트 검색창
 
-        JTextField playerSearch = new JTextField();
+        playerSearch = new JTextField();
         playerSearch.setBounds(160, 120, 170, 20);
         playerSearch.addKeyListener(this);
         add(playerSearch);
@@ -457,6 +461,28 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
     @Override
     public void keyReleased(KeyEvent e) {
 
+        if(e.getSource() == playerSearch) {
+            String searchText = playerSearch.getText().toLowerCase();
+            filterTable(searchText);
+        }
+
+    }
+
+    private void filterTable(String searchText) {
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(table.getModel());
+        table.setRowSorter(sorter);
+
+        if(searchText.length() == 0) {
+            sorter.setRowFilter(null);
+        }else {
+            try {
+                //이름열을 기준으로 필터링
+                RowFilter<TableModel, Object> rf = RowFilter.regexFilter("(?i)" + searchText, 1);
+                sorter.setRowFilter(rf);
+            }catch (java.util.regex.PatternSyntaxException e) {
+                return;
+            }
+        }
     }
 
     @Override
