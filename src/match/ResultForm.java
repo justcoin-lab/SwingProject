@@ -203,52 +203,62 @@ public class ResultForm extends JFrame implements ActionListener {
 
 	// mvpInfo 업데이트
 	public void MvpInfo(String mvpName) {
-		mvpDataPanel.removeAll(); // 클릭 시 업데이트를 위한 초기화
-		mvpDataPanel.setLayout(new BorderLayout()); // 전체 패널 레이아웃 설정
+		mvpDataPanel.removeAll(); // 업데이트를 위한 초기화
+		mvpDataPanel.setLayout(new GridBagLayout());
+		mvpDataPanel.setBackground(new Color(255, 255, 240));
+		GridBagConstraints gbc = new GridBagConstraints();
 
 		PlayerDto mvpPlayer = ResultList.getMvpPlayer(mvpName);
 
 		if (mvpPlayer != null) {
-			// 맨 처음 선수 사진
+			// 선수 사진
 			JLabel photolbl = new JLabel();
-			photolbl.setHorizontalAlignment(SwingConstants.CENTER);
-			ImageIcon playerImage = new ImageIcon("images/" + mvpPlayer.getName() + ".jpg"); // 선수 사진 경로 설정
-			Image img = playerImage.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH); // 사진 크기 조정
+			ImageIcon playerImage = new ImageIcon("images/" + mvpPlayer.getName() + ".jpg");
+			Image img = playerImage.getImage().getScaledInstance(180, 180, Image.SCALE_SMOOTH);
 			photolbl.setIcon(new ImageIcon(img));
-			mvpDataPanel.add(photolbl, BorderLayout.NORTH); // 사진을 맨 위에 배치
+
+			// 선수 사진과 선수 정보와의 간격 조절
+			gbc.gridx = 0;
+			gbc.gridy = 0;
+			gbc.insets = new Insets(10, 0, 20, 0); // 사진 bottom 여백 20px
+			gbc.anchor = GridBagConstraints.CENTER;
+			mvpDataPanel.add(photolbl, gbc);
+			// -- 여기까지
 
 			// 선수 정보
-			JPanel infoPanel = new JPanel(new GridLayout(5, 1, 5, 5)); // 5행 1열, 간격 조정
-			infoPanel.setBackground(new Color(255, 255, 240));
+			String[] labels = {
+					"이름 : " + mvpPlayer.getName(),
+					"나이 : " + mvpPlayer.getAge(),
+					"키 : " + mvpPlayer.getHeight() + "cm",
+					"몸무게 : " + mvpPlayer.getWeight() + "kg",
+					"포지션 : " + mvpPlayer.getPosition()
+			};
 
-			JLabel namelbl = new JLabel("이름 : " + mvpPlayer.getName());
-			JLabel agelbl = new JLabel("나이 : " + mvpPlayer.getAge());
-			JLabel heightlbl = new JLabel("키 : " + mvpPlayer.getHeight() + "cm");
-			JLabel weightlbl = new JLabel("몸무게 : " + mvpPlayer.getWeight() + "kg");
-			JLabel positionlbl = new JLabel("포지션 : " + mvpPlayer.getPosition());
+			for (int i = 0; i < labels.length; i++) {
+				JLabel label = new JLabel(labels[i]);
+				label.setFont(new Font("맑은 고딕", Font.PLAIN, 13));
+				label.setHorizontalAlignment(SwingConstants.CENTER);
 
-			namelbl.setHorizontalAlignment(SwingConstants.CENTER);
-			agelbl.setHorizontalAlignment(SwingConstants.CENTER);
-			heightlbl.setHorizontalAlignment(SwingConstants.CENTER);
-			weightlbl.setHorizontalAlignment(SwingConstants.CENTER);
-			positionlbl.setHorizontalAlignment(SwingConstants.CENTER);
-
-			infoPanel.add(namelbl);
-			infoPanel.add(agelbl);
-			infoPanel.add(heightlbl);
-			infoPanel.add(weightlbl);
-			infoPanel.add(positionlbl);
-
-			mvpDataPanel.add(infoPanel, BorderLayout.CENTER); // 정보 패널을 중앙에 배치
+				gbc.gridy = i + 1; // 사진 아래로 순서대로 추가
+				gbc.insets = new Insets(5, 0, 5, 0); // top, bottom 간격 5px
+				mvpDataPanel.add(label, gbc);
+			}
 		} else {
+			// MVP 정보가 없을 때 정보없음 메시지
 			JLabel notfoundlbl = new JLabel("해당 경기 MVP 정보가 없습니다.");
+			notfoundlbl.setFont(new Font("맑은 고딕", Font.BOLD, 14));
+			notfoundlbl.setForeground(Color.RED);
 			notfoundlbl.setHorizontalAlignment(SwingConstants.CENTER);
-			mvpDataPanel.add(notfoundlbl, BorderLayout.CENTER);
+
+			gbc.gridy = 0;
+			gbc.insets = new Insets(10, 0, 10, 0);
+			mvpDataPanel.add(notfoundlbl, gbc);
 		}
 
 		mvpDataPanel.revalidate();
 		mvpDataPanel.repaint();
 	}
+
 
 
 
