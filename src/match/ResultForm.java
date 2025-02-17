@@ -1,5 +1,6 @@
 package match;
 
+import db.Util;
 import main.MainFrame;
 import player.PlayerDto;
 import player.PlayerForm;
@@ -17,6 +18,7 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
@@ -25,6 +27,7 @@ public class ResultForm extends JFrame implements ActionListener {
 	public JPanel listInfo;
 	public JPanel mvpInfo;
 	public JPanel mvpDataPanel;
+	public JTable table;
 	public JButton btn1;
 	public JButton btn2;
 	public JButton btn3;
@@ -108,6 +111,7 @@ public class ResultForm extends JFrame implements ActionListener {
 		resultDeleteBtn.setBounds(870, 220, 100, 50);
 		resultDeleteBtn.setBackground(new Color(255, 228, 196));
 		resultDeleteBtn.setBorderPainted(false);
+		resultDeleteBtn.addActionListener(this);
 
 		add(btn1);
 		add(btn2);
@@ -149,7 +153,7 @@ public class ResultForm extends JFrame implements ActionListener {
 			data[i][7] = match.getMvp();
 		}
 
-		JTable table = new JTable(data, columnNames);
+		table = new JTable(data, columnNames); // 필드 `table`에 할당
 
 		// 테이블 셀 편집 방지
 		table.setDefaultEditor(Object.class, null);
@@ -196,6 +200,7 @@ public class ResultForm extends JFrame implements ActionListener {
 
 		mvpDataPanel = new JPanel();
 		mvpDataPanel.setBounds(600, 100, 240, 420);
+		mvpDataPanel.setBackground(new Color(255, 255, 240));
 		add(mvpDataPanel);
 
 		add(listInfo);
@@ -263,14 +268,57 @@ public class ResultForm extends JFrame implements ActionListener {
 		mvpDataPanel.repaint();
 	}
 
+	// 테이블 새로고침 메서드
+	public void refreshTable() {
+		List<MatchDto> matchResult = ResultList.getMatchResultList();
 
+		String[] columnNames = {"매치", "날짜", "상대팀", "득점", "실점", "경고", "퇴장", "MVP"};
+		Object[][] data = new Object[matchResult.size()][8];
+
+		SimpleDateFormat dataFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+		for (int i = 0; i < matchResult.size(); i++) {
+			MatchDto match = matchResult.get(i);
+			data[i][0] = match.getMatchName();
+			data[i][1] = dataFormat.format(match.getMatchDate());
+			data[i][2] = match.getOpposing();
+			data[i][3] = match.getOurScore();
+			data[i][4] = match.getOppScore();
+			data[i][5] = match.getYellowCard();
+			data[i][6] = match.getRedCard();
+			data[i][7] = match.getMvp();
+		}
+
+		DefaultTableModel model = new DefaultTableModel(data, columnNames);
+
+		table.setModel(model); // NullPointerException 방지 (table이 초기화된 상태)
+		table.revalidate();
+		table.repaint();
+
+		// 각 열에 대해 가운데 정렬 설정
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER); // 가운데 정렬
+
+		// 모든 열 가운데 정렬, 데이터에 맞춰 각 열의 크기 조정
+		for (int i = 0; i < table.getColumnCount(); i++) {
+			table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+			TableColumn column = table.getColumnModel().getColumn(i);
+			int width = 0;
+			for (int row = 0; row < table.getRowCount(); row++) {
+				TableCellRenderer renderer = table.getCellRenderer(row, i);
+				Component comp = table.prepareRenderer(renderer, row, i);
+				width = Math.max(comp.getPreferredSize().width, width);
+			}
+			column.setPreferredWidth(width + 10); // 여백을 주기 위해 +10
+		}
+	}
 
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object obj = e.getSource();
 
-		if(obj == btn1) {
+		if (obj == btn1) {
 			new MainFrame("national-team management");
 			dispose();
 		} else if (obj == btn2) {
@@ -286,8 +334,26 @@ public class ResultForm extends JFrame implements ActionListener {
 			dispose();
 		}
 
-		if(obj == resultInsertBtn) {
-			new JOptionPane().createDialog("title");
+		// 기록 입력 버튼 액션 리스너
+		if (obj == resultInsertBtn) {
+			new ResultInputDialog(this).setVisible(true);
+			refreshTable();
+		}
+		// 기록 삭제 버튼 액션 리스너
+		if (obj == resultDeleteBtn) {
+			int row = table.getSelectedRow();
+			if (row == -1) {
+				JOptionPane.showMessageDialog(this, "삭제할 경기를 제대로 클릭하고 눌러주세요", "확인", JOptionPane.WARNING_MESSAGE);
+				return;
+			}
+
+			int confirm = JOptionPane.showConfirmDialog(this, "정말 삭제하시겠습니까?", "삭제", JOptionPane.YES_NO_OPTION);
+			if (confirm == JOptionPane.YES_OPTION) {
+				String name = (String) table.getValueAt(row, 7);
+				String opposing = (String) table.getValueAt(row, 2);
+				Util.executeSql("delete from match where mvp = '" + name + "' and opposing = '" + opposing + "'");
+			}
+			refreshTable();
 		}
 	}
 }
