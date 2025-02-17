@@ -17,7 +17,7 @@ public class ResultList {
         try {
             Util.init();
 
-            ResultSet rs = Util.getResult("select * from match");
+            ResultSet rs = Util.getResult("select * from match order by matchDate desc");
 
             while (rs.next()) {
                 String matchName = rs.getString("matchName");
