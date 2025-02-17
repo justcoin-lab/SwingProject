@@ -2,6 +2,7 @@ package main;
 
 import match.ResultForm;
 import player.PlayerForm;
+import schedule.ScheduleForm;
 
 import java.awt.Color;
 import java.awt.Container;
@@ -89,6 +90,9 @@ public class MainFrame extends JFrame implements ActionListener{
 			// new InputForm();
 		} else if (obj == btn4) {
 			new ResultForm("national-team management");
+			dispose();
+		} else if (obj == btn5) {
+			new ScheduleForm("national-team management");
 			dispose();
 		}
 	}

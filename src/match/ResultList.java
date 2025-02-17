@@ -40,7 +40,7 @@ public class ResultList {
     }
 
     // mvpName 값을 매개변수로 받아 해당 플레이어 모델 반환
-    public PlayerDto getMvpPlayer(String mvpName) {
+    public static PlayerDto getMvpPlayer(String mvpName) {
         List<PlayerDto> playerList = PlayerList.getPlayerList();
         for(PlayerDto player : playerList) {
             if(player.getName().equals(mvpName)) {
