@@ -1,5 +1,7 @@
 package player;
 
+import db.Util;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -153,7 +155,7 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
         btn7.setBounds(880, 400, 90, 50);
         btn7.setBackground(new Color(0x476EC5));
         btn7.setBorderPainted(false);
-
+        btn7.addActionListener(this); // ★ 이 코드 추가
         add(btn6);
         add(btn7);
 
@@ -366,7 +368,79 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
             // PlayerUpdateDialog 창 열기 (PlayerForm을 부모 창으로 전달)
             PlayerUpdateDialog updateForm = new PlayerUpdateDialog(player, this);
             updateForm.setVisible(true);
+        } else if(e.getSource() == btn7) { //방출버튼
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "방출할 선수를 선택해주세요");
+                return;
+            }
+            //선수 정보 가져오기
+
+            String name = table.getValueAt(selectedRow, 1).toString();
+
+
+            // confirmation dialog
+            int result = JOptionPane.showConfirmDialog(this,
+                    name + "선수를 방출하시겠습니까?", "선수방출",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+
+            if(result == JOptionPane.YES_OPTION) {
+                //선수 데이타 삭제
+                deletePlayer(name);
+
+                //테이블 새로고침
+                ((PlayerList)table.getModel()).setData();
+
+                //  선수세부사항 클리어
+                clearPlayerDetails();
+
+                JOptionPane.showMessageDialog(this,
+                        name + "선수가 방출되었습니다",
+                        "방출완료",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
         }
+
+
+    }
+
+    private boolean deletePlayer(String name) {
+        try {
+            //디비 연결 초기화
+            Util.init();
+
+            //선수 이름 기준 삭제 쿼리 생성 및 실행
+            String sql = "DELETE FROM player WHERE name = '" + name + "'";
+            Util.executeSql(sql);
+            return true;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "선수 방출중 오류가 발생했습니다.\n" +
+                    e.getMessage(),
+                    "오류",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+
+    private void clearPlayerDetails() {
+
+        //세부선수 정보 클리어
+        pn.setText("번호");
+        name.setText("선수이름");
+        age.setText("나이");
+        height.setText("키");
+        weight.setText("몸무게");
+        position.setText("포지션");
+        injury.setText("부상여부");
+        roster.setText("선발여부");
+
+        //선수 이미지 클리어
+        playerImage.setText(null);
+        playerImage.setText("선수 이미지");
+
+
     }
 
 
