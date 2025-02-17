@@ -249,14 +249,16 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
         int gap = 10;
 
         //각 정보 라벨 생성 및 위치 설정
-        name = createInfoLabel("이름: ", labelX, startY);
-        age = createInfoLabel("나이: ", labelX, startY + (labelHeight + gap));
-        height = createInfoLabel("키: ", labelX, startY + 2 * (labelHeight + gap));
-        weight = createInfoLabel("몸무게: ", labelX, startY + 3 * (labelHeight + gap));
-        position = createInfoLabel("포지션: ", labelX, startY + 4 * (labelHeight + gap));
-        injury = createInfoLabel("부상여부: ", labelX, startY + 5 * (labelHeight + gap));
-        roster = createInfoLabel("선발여부: ", labelX, startY + 6 * (labelHeight + gap));
+        pn = createInfoLabel("번호: ", labelX, startY);
+        name = createInfoLabel("이름: ", labelX, startY + (labelHeight + gap));
+        age = createInfoLabel("나이: ", labelX, startY + 2 * (labelHeight + gap));
+        height = createInfoLabel("키: ", labelX, startY + 3 * (labelHeight + gap));
+        weight = createInfoLabel("몸무게: ", labelX, startY + 4 * (labelHeight + gap));
+        position = createInfoLabel("포지션: ", labelX, startY + 5 * (labelHeight + gap));
+        injury = createInfoLabel("부상여부: ", labelX, startY + 6 * (labelHeight + gap));
+        roster = createInfoLabel("선발여부: ", labelX, startY + 7 * (labelHeight + gap));
 
+        panel.add(pn);
         panel.add(name);
         panel.add(age);
         panel.add(height);
@@ -314,6 +316,7 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
         }
 
         // 선수 정보 라벨 업데이트
+        pn.setText("번호: " + table.getValueAt(row, 0));
         name.setText("이름: " + table.getValueAt(row, 1));
         age.setText("나이: " + table.getValueAt(row, 2) + "세");
         height.setText("키: " + table.getValueAt(row, 3) + "cm");
