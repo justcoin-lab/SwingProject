@@ -269,16 +269,7 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
 // 테이블 헤더 설정
         table.getTableHeader().setReorderingAllowed(false);
         table.getTableHeader().setResizingAllowed(false);
-
         add(jscrollPane);
-
-// 컴포넌트 갱신
-      /*  SwingUtilities.invokeLater(() -> {
-            model.fireTableDataChanged();
-            table.repaint();
-            jscrollPane.revalidate();
-            jscrollPane.repaint();
-        });*/
 
         setVisible(true);
         this.table = table;
@@ -451,15 +442,15 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
                         JOptionPane.INFORMATION_MESSAGE);
             }
         }else if(e.getSource() == btn4) {
-            try {
                 System.out.println("btn4 클릭됨");
                 new ResultForm("경기결과");
                 dispose();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "경기 결과 화면을 여는 도중 오류 발생: " + ex.getMessage());
-            }
+        } else if (e.getSource() == btn3) {
+            System.out.println("btn3 클릭됨");
+            new PlayerInputForm("선수 입력");
+            dispose();
         }
+
 
 
     }
