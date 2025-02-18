@@ -3,6 +3,7 @@ package player;
 import db.Util;
 import main.MainFrame;
 import match.ResultForm;
+import schedule.ScheduleForm;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -210,12 +211,14 @@ public class PlayerInputForm extends JFrame implements ActionListener {
             new PlayerForm("구단 선수 목록");
             dispose();
         }else if (source == btn3) {
-            //지금 입력하는곳
+            new PlayerInputForm("선수 입력");
+            dispose();
         }else if (source == btn4) {
             new ResultForm("구단 최근 경기");
             dispose();
         }else if (source == btn5) {
-            //만들기 기다리는 중
+             new ScheduleForm("경기 일정");
+             dispose();
         } else if (source == btnSelectImage) { //이미지 선택 버튼
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter(
