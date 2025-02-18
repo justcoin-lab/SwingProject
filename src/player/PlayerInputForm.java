@@ -48,7 +48,7 @@ public class PlayerInputForm extends JFrame implements ActionListener {
         ct.setBackground(new Color(250,240,230));
 
         //상단 메뉴 버튼 초기화
-        //initTopButtons();
+        initTopButtons();
 
         //메인 패널 초기화
         JPanel mainPanel = new JPanel();
@@ -83,6 +83,11 @@ public class PlayerInputForm extends JFrame implements ActionListener {
         mainPanel.add(buttonPanel); // buttonPanel을 mainPanel에 추가
         setVisible(true);
 
+    }
+
+    private void initTopButtons() {
+        btn1 = new JButton("대한민국 국가대표 축구단");
+        btn1.setBounds(10,10,185,50);
     }
 
 
