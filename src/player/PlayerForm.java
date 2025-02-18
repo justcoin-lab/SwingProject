@@ -1,7 +1,9 @@
 package player;
 
 import db.Util;
+import main.MainFrame;
 import match.ResultForm;
+import schedule.ScheduleForm;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -45,7 +47,6 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
     JTextField playerSearch;
     public JPanel mainSpace;
     //상위 매뉴 버튼 시작---------------------
-
 
     public PlayerForm(String title) {
         //----메인화면 기본틀 시작-----
@@ -92,7 +93,6 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
         btn5.setBackground(new Color(255, 228, 196));
         btn5.setBorderPainted(false);
         btn5.addActionListener(this);
-
 
         add(btn1);
         add(btn2);
@@ -150,8 +150,6 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
 
         //선수 리스트 검색창 끝
 
-
-
         //메인화면 맨위 버튼 시작-------
 
         /*btn1 = new JButton("대한민국 축구단");
@@ -199,7 +197,6 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
         btn6.setBorderPainted(false);
 
         add(btn6);*/
-
 
         deleteBtn = new JButton("방출");
         deleteBtn.setBounds(880, 400, 90, 50);
@@ -269,16 +266,7 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
 // 테이블 헤더 설정
         table.getTableHeader().setReorderingAllowed(false);
         table.getTableHeader().setResizingAllowed(false);
-
         add(jscrollPane);
-
-// 컴포넌트 갱신
-      /*  SwingUtilities.invokeLater(() -> {
-            model.fireTableDataChanged();
-            table.repaint();
-            jscrollPane.revalidate();
-            jscrollPane.repaint();
-        });*/
 
         setVisible(true);
         this.table = table;
@@ -386,12 +374,9 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
         roster.setText("선발여부: " + table.getValueAt(row, 7));
     }
 
-
-
     public JTable getTable() {
         return table;
     }
-
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -428,7 +413,6 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
 
             String name = table.getValueAt(selectedRow, 1).toString();
 
-
             // confirmation dialog
             int result = JOptionPane.showConfirmDialog(this,
                     name + "선수를 방출하시겠습니까?", "선수방출",
@@ -450,18 +434,22 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
                         "방출완료",
                         JOptionPane.INFORMATION_MESSAGE);
             }
-        }else if(e.getSource() == btn4) {
-            try {
-                System.out.println("btn4 클릭됨");
-                new ResultForm("경기결과");
-                dispose();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                JOptionPane.showMessageDialog(this, "경기 결과 화면을 여는 도중 오류 발생: " + ex.getMessage());
-            }
+        }else if(e.getSource() == btn1) {
+            new MainFrame("대한민국 축구 국가대표팀");
+            dispose();
+        } else if (e.getSource() == btn2) {
+            new PlayerForm("대한민국 축구 국가대표팀");
+            dispose();
+        } else if (e.getSource() == btn3) {
+            new PlayerInputForm("대한민국 축구 국가대표팀");
+            dispose();
+        } else if (e.getSource() == btn4) {
+            new ResultForm("대한민국 축구 국가대표팀");
+            dispose();
+        } else if (e.getSource() == btn5) {
+            new ScheduleForm("대한민국 축구 국가대표팀");
+            dispose();
         }
-
-
     }
 
     private boolean deletePlayer(String name) {
@@ -498,20 +486,13 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
         //선수 이미지 클리어
         playerImage.setText(null);
         playerImage.setText("선수 이미지");
-
-
-    }
-
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-
     }
 
     @Override
-    public void keyPressed(KeyEvent e) {
+    public void keyTyped(KeyEvent e) {}
 
-    }
+    @Override
+    public void keyPressed(KeyEvent e) {}
 
     @Override
     public void keyReleased(KeyEvent e) {
@@ -520,7 +501,6 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
             String searchText = playerSearch.getText().toLowerCase();
             filterTable(searchText);
         }
-
     }
 
     private void filterTable(String searchText) {
@@ -552,22 +532,11 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
+    public void mousePressed(MouseEvent e) {}
     @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
+    public void mouseReleased(MouseEvent e) {}
     @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
+    public void mouseEntered(MouseEvent e) {}
     @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
+    public void mouseExited(MouseEvent e) {}
 }
