@@ -92,6 +92,7 @@ public class MainFrame extends JFrame implements ActionListener{
 		} else if (obj == btn3) {
 			new PlayerInputForm("national-team management");
 			// new InputForm();
+			dispose();
 		} else if (obj == btn4) {
 			new ResultForm("national-team management");
 			dispose();
