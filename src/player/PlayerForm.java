@@ -1,14 +1,16 @@
 package player;
 
-import main.MainFrame;
+import db.Util;
 import match.ResultForm;
-import schedule.ScheduleForm;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -36,21 +38,65 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
     public JButton btn3;
     public JButton btn4;
     public JButton btn5;
-    public JButton btn6;
-    public JButton btn7;
+    public JButton updateBtn;
+    public JButton deleteBtn;
 
     private JTable table;
+    JTextField playerSearch;
+    public JPanel mainSpace;
     //상위 매뉴 버튼 시작---------------------
-
 
     public PlayerForm(String title) {
         //----메인화면 기본틀 시작-----
         setTitle(title);
         setSize(1000,600);
-        setLocation(570,240);
+        setLocation(460,240);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setLayout(null);
+
+        Container ct = getContentPane();
+        ct.setBackground(new Color(250, 240, 230));
+
+        mainSpace = new JPanel();
+        mainSpace.setBackground(new Color(255, 255, 240));
+        mainSpace.setBounds(0, 60, 1000, 540);
+
+        btn1 = new JButton("대한민국 축구단");
+        btn1.setBounds(10, 10, 185, 50);
+        btn1.setBackground(new Color(255, 228, 196));
+        btn1.setBorderPainted(false);
+        btn1.addActionListener(this);
+
+        btn2 = new JButton("구단 선수 목록");
+        btn2.setBounds(205, 10, 185, 50);
+        btn2.setBackground(new Color(255, 228, 196));
+        btn2.setBorderPainted(false);
+        btn2.addActionListener(this);
+
+        btn3 = new JButton("선수 입력");
+        btn3.setBounds(400, 10, 185, 50);
+        btn3.setBackground(new Color(255, 228, 196));
+        btn3.setBorderPainted(false);
+        btn3.addActionListener(this);
+
+        btn4 = new JButton("구단 최근 경기");
+        btn4.setBounds(595, 10, 185, 50);
+        btn4.setBackground(new Color(255, 228, 196));
+        btn4.setBorderPainted(false);
+        btn4.addActionListener(this);
+
+        btn5 = new JButton("구단 일정");
+        btn5.setBounds(790, 10, 185, 50);
+        btn5.setBackground(new Color(255, 228, 196));
+        btn5.setBorderPainted(false);
+        btn5.addActionListener(this);
+
+        add(btn1);
+        add(btn2);
+        add(btn3);
+        add(btn4);
+        add(btn5);
 
         //----메인화면 기본틀 끝-----
 
@@ -95,18 +141,16 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
 
         //선수 리스트 검색창
 
-        JTextField playerSearch = new JTextField();
+        playerSearch = new JTextField();
         playerSearch.setBounds(160, 120, 170, 20);
         playerSearch.addKeyListener(this);
         add(playerSearch);
 
         //선수 리스트 검색창 끝
 
-
-
         //메인화면 맨위 버튼 시작-------
 
-        btn1 = new JButton("대한민국 축구단");
+        /*btn1 = new JButton("대한민국 축구단");
         btn1.setBounds(10, 10, 185, 50);
         btn1.setBackground(new Color(255, 228, 196));
         btn1.setBorderPainted(false);
@@ -135,22 +179,30 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
         btn5.setBackground(new Color(255, 228, 196));
         btn5.setBorderPainted(false);
         btn5.addActionListener(this);
-
+*/
         //메인화면 맨위 버튼 끝-------
 
         //사이드 버튼 시작-----------
-        btn6 = new JButton("업데이트");
+        updateBtn = new JButton("업데이트");
+        updateBtn.setBounds(880, 200, 90, 50);
+        updateBtn.setBackground(new Color(0x476EC5));
+        updateBtn.setBorderPainted(false);
+        updateBtn.addActionListener(this); // ★ 이 코드 추가
+
+        /*btn6 = new JButton("업데이트");
         btn6.setBounds(880, 200, 90, 50);
         btn6.setBackground(new Color(0x476EC5));
         btn6.setBorderPainted(false);
 
-        btn7 = new JButton("방출");
-        btn7.setBounds(880, 400, 90, 50);
-        btn7.setBackground(new Color(0x476EC5));
-        btn7.setBorderPainted(false);
+        add(btn6);*/
 
-        add(btn6);
-        add(btn7);
+        deleteBtn = new JButton("방출");
+        deleteBtn.setBounds(880, 400, 90, 50);
+        deleteBtn.setBackground(new Color(0x476EC5));
+        deleteBtn.setBorderPainted(false);
+        deleteBtn.addActionListener(this); // ★ 이 코드 추가
+        add(updateBtn);
+        add(deleteBtn);
 
         //사이드 버튼 끝-----------
 
@@ -212,16 +264,7 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
 // 테이블 헤더 설정
         table.getTableHeader().setReorderingAllowed(false);
         table.getTableHeader().setResizingAllowed(false);
-
         add(jscrollPane);
-
-// 컴포넌트 갱신
-      /*  SwingUtilities.invokeLater(() -> {
-            model.fireTableDataChanged();
-            table.repaint();
-            jscrollPane.revalidate();
-            jscrollPane.repaint();
-        });*/
 
         setVisible(true);
         this.table = table;
@@ -329,13 +372,145 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
         roster.setText("선발여부: " + table.getValueAt(row, 7));
     }
 
+    public JTable getTable() {
+        return table;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == updateBtn) {  // e.getSource()는 이벤트 발생 객체를 가져옴
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "수정할 선수를 선택해주세요.");
+                return;
+            }
+
+            // 선택된 선수 정보 가져오기
+            int pn = Integer.parseInt(table.getValueAt(selectedRow, 0).toString());
+            String name = table.getValueAt(selectedRow, 1).toString();
+            int age = Integer.parseInt(table.getValueAt(selectedRow, 2).toString());
+            int height = Integer.parseInt(table.getValueAt(selectedRow, 3).toString());
+            int weight = Integer.parseInt(table.getValueAt(selectedRow, 4).toString());
+            String position = table.getValueAt(selectedRow, 5).toString();
+            String injury = table.getValueAt(selectedRow, 6).toString();
+            String roster = table.getValueAt(selectedRow, 7).toString();
+
+            // PlayerDto 객체 생성
+            PlayerDto player = new PlayerDto(pn, name, age, height, weight, position, injury, roster);
+
+            // PlayerUpdateDialog 창 열기 (PlayerForm을 부모 창으로 전달)
+            PlayerUpdateDialog updateForm = new PlayerUpdateDialog(player, this);
+            updateForm.setVisible(true);
+        } else if(e.getSource() == deleteBtn) { //방출버튼
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "방출할 선수를 선택해주세요");
+                return;
+            }
+            //선수 정보 가져오기
+
+            String name = table.getValueAt(selectedRow, 1).toString();
+
+            // confirmation dialog
+            int result = JOptionPane.showConfirmDialog(this,
+                    name + "선수를 방출하시겠습니까?", "선수방출",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+
+            if(result == JOptionPane.YES_OPTION) {
+                //선수 데이타 삭제
+                deletePlayer(name);
+
+                //테이블 새로고침
+                ((PlayerList)table.getModel()).setData();
+
+                //  선수세부사항 클리어
+                clearPlayerDetails();
+
+                JOptionPane.showMessageDialog(this,
+                        name + "선수가 방출되었습니다",
+                        "방출완료",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+        }else if(e.getSource() == btn4) {
+                System.out.println("btn4 클릭됨");
+                new ResultForm("경기결과");
+                dispose();
+        } else if (e.getSource() == btn3) {
+            System.out.println("btn3 클릭됨");
+            new PlayerInputForm("선수 입력");
+            dispose();
+        }
+    }
+
+    private boolean deletePlayer(String name) {
+        try {
+            //디비 연결 초기화
+            Util.init();
+
+            //선수 이름 기준 삭제 쿼리 생성 및 실행
+            String sql = "DELETE FROM player WHERE name = '" + name + "'";
+            Util.executeSql(sql);
+            return true;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,
+                    "선수 방출중 오류가 발생했습니다.\n" +
+                    e.getMessage(),
+                    "오류",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+    }
+
+    private void clearPlayerDetails() {
+
+        //세부선수 정보 클리어
+        pn.setText("번호");
+        name.setText("선수이름");
+        age.setText("나이");
+        height.setText("키");
+        weight.setText("몸무게");
+        position.setText("포지션");
+        injury.setText("부상여부");
+        roster.setText("선발여부");
+
+        //선수 이미지 클리어
+        playerImage.setText(null);
+        playerImage.setText("선수 이미지");
+    }
 
     @Override
     public void keyTyped(KeyEvent e) {}
+
     @Override
     public void keyPressed(KeyEvent e) {}
+
     @Override
-    public void keyReleased(KeyEvent e) {}
+    public void keyReleased(KeyEvent e) {
+
+        if(e.getSource() == playerSearch) {
+            String searchText = playerSearch.getText().toLowerCase();
+            filterTable(searchText);
+        }
+    }
+
+    private void filterTable(String searchText) {
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(table.getModel());
+        table.setRowSorter(sorter);
+
+        if(searchText.length() == 0) {
+            sorter.setRowFilter(null);
+        }else {
+            try {
+                //이름열을 기준으로 필터링
+                RowFilter<TableModel, Object> rf = RowFilter.regexFilter("(?i)" + searchText, 1);
+                sorter.setRowFilter(rf);
+            }catch (java.util.regex.PatternSyntaxException e) {
+                return;
+            }
+        }
+    }
+
     @Override
     public void mouseClicked(MouseEvent e) {
         if (e.getSource() == table) {
