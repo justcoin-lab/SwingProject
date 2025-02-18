@@ -53,10 +53,10 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
         setSize(1000,600);
         setLocation(460,240);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(false);
-        setLayout(null);
+        setResizable(false); //크기 변경 x
+        setLayout(null); //절대값으로 위치 설정
 
-        Container ct = getContentPane();
+        Container ct = getContentPane();  //패널의 배경색을 설정하기 위해 사용
         ct.setBackground(new Color(250, 240, 230));
 
         mainSpace = new JPanel();
