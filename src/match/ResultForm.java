@@ -4,6 +4,7 @@ import db.Util;
 import main.MainFrame;
 import player.PlayerDto;
 import player.PlayerForm;
+import player.PlayerInputForm;
 import schedule.ScheduleForm;
 
 import java.awt.*;
@@ -23,19 +24,19 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 public class ResultForm extends JFrame implements ActionListener {
-	public JPanel mainSpace;
-	public JPanel listInfo;
-	public JPanel mvpInfo;
-	public JPanel mvpDataPanel;
-	public JTable table;
-	public JButton btn1;
-	public JButton btn2;
-	public JButton btn3;
-	public JButton btn4;
-	public JButton btn5;
-	public JButton resultInsertBtn;
-	public JButton resultModifyBtn;
-	public JButton resultDeleteBtn;
+	private JPanel mainSpace;
+	private JPanel listInfo;
+	private JPanel mvpInfo;
+	private JPanel mvpDataPanel;
+	private JTable table;
+	private JButton btn1;
+	private JButton btn2;
+	private JButton btn3;
+	private JButton btn4;
+	private JButton btn5;
+	private JButton resultInsertBtn;
+	private JButton resultModifyBtn;
+	private JButton resultDeleteBtn;
 
 
 	public ResultForm(String title) {
@@ -222,17 +223,17 @@ public class ResultForm extends JFrame implements ActionListener {
 
 		if (mvpPlayer != null) {
 			// 선수 사진
-			JLabel photolbl = new JLabel();
+			JLabel piclbl = new JLabel();
 			ImageIcon playerImage = new ImageIcon("images/" + mvpPlayer.getName() + ".jpg");
 			Image img = playerImage.getImage().getScaledInstance(180, 180, Image.SCALE_SMOOTH);
-			photolbl.setIcon(new ImageIcon(img));
+			piclbl.setIcon(new ImageIcon(img));
 
 			// 선수 사진과 선수 정보와의 간격 조절
 			gbc.gridx = 0;
 			gbc.gridy = 0;
 			gbc.insets = new Insets(10, 0, 20, 0); // 사진 bottom 여백 20px
 			gbc.anchor = GridBagConstraints.CENTER;
-			mvpDataPanel.add(photolbl, gbc);
+			mvpDataPanel.add(piclbl, gbc);
 			// -- 여기까지
 
 			// 선수 정보
@@ -255,14 +256,14 @@ public class ResultForm extends JFrame implements ActionListener {
 			}
 		} else {
 			// MVP 정보가 없을 때 정보없음 메시지
-			JLabel notfoundlbl = new JLabel("해당 경기 MVP 정보가 없습니다.");
-			notfoundlbl.setFont(new Font("맑은 고딕", Font.BOLD, 14));
-			notfoundlbl.setForeground(Color.RED);
-			notfoundlbl.setHorizontalAlignment(SwingConstants.CENTER);
+			JLabel notFoundlbl = new JLabel("해당 경기 MVP 정보가 없습니다.");
+			notFoundlbl.setFont(new Font("맑은 고딕", Font.BOLD, 14));
+			notFoundlbl.setForeground(Color.RED);
+			notFoundlbl.setHorizontalAlignment(SwingConstants.CENTER);
 
 			gbc.gridy = 0;
 			gbc.insets = new Insets(10, 0, 10, 0);
-			mvpDataPanel.add(notfoundlbl, gbc);
+			mvpDataPanel.add(notFoundlbl, gbc);
 		}
 
 		mvpDataPanel.revalidate();
@@ -292,7 +293,7 @@ public class ResultForm extends JFrame implements ActionListener {
 
 		DefaultTableModel model = new DefaultTableModel(data, columnNames);
 
-		table.setModel(model); // NullPointerException 방지 (table이 초기화된 상태)
+		table.setModel(model); // NullPointerException 방지 (table 초기화된 상태)
 		table.revalidate();
 		table.repaint();
 
@@ -314,30 +315,37 @@ public class ResultForm extends JFrame implements ActionListener {
 		}
 	}
 
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object obj = e.getSource();
 
 		if (obj == btn1) {
-			new MainFrame("national-team management");
+			new MainFrame("대한민국 축구 국가대표팀");
 			dispose();
 		} else if (obj == btn2) {
-			new PlayerForm("national-team management");
+			new PlayerForm("대한민국 축구 국가대표팀");
 			dispose();
 		} else if (obj == btn3) {
-			// new InputForm();
+			new PlayerInputForm("대한민국 축구 국가대표팀");
+			dispose();
 		} else if (obj == btn4) {
-			new ResultForm("national-team management");
+			new ResultForm("대한민국 축구 국가대표팀");
 			dispose();
 		} else if (obj == btn5) {
-			new ScheduleForm("national-team management");
+			new ScheduleForm("대한민국 축구 국가대표팀");
 			dispose();
 		}
 
 		// 기록 입력 버튼 액션 리스너
 		if (obj == resultInsertBtn) {
-			new ResultInputDialog(this).setVisible(true);
+			new ResultPopup(this, false, null, null).setVisible(true);
+			refreshTable();
+		}
+		if (obj == resultModifyBtn) {
+			int row = table.getSelectedRow();
+			String oppoForEdit = (String) table.getValueAt(row, 2);
+			String mvpForEdit = (String) table.getValueAt(row, 7);
+			new ResultPopup(this, true, oppoForEdit, mvpForEdit).setVisible(true);
 			refreshTable();
 		}
 		// 기록 삭제 버튼 액션 리스너
