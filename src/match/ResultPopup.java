@@ -53,14 +53,15 @@ public class ResultPopup extends JDialog implements ActionListener {
         for (int i = 1; i <= 31; i++) {
             dComboBox.addItem(i);
         }
-
+        // 년도 입력 JComboBox 위치
         gbc.gridx = 1;
         add(yComboBox, gbc);
         gbc.gridx = 2;
         add(mComboBox, gbc);
         gbc.gridx = 3;
         add(dComboBox, gbc);
-
+        
+        // input title, field 생성 및 배치
         String[] lbl = {"경기 이름 : ", "상대팀 : ", "득점 : ", "실점 : ", "경고 : ", "퇴장 : ", "MVP 선수 이름 : "};
         JTextField[] jField = {matchNameField, opposingField, ourScoreField, oppScoreField, yellowCardField, redCardField};
 
@@ -95,6 +96,7 @@ public class ResultPopup extends JDialog implements ActionListener {
         yellowCardField = jField[4];
         redCardField = jField[5];
 
+        // 입력, 수정 스위칭 확인
         if (isEditMode) {
             loadMatchData();
         }
@@ -136,9 +138,10 @@ public class ResultPopup extends JDialog implements ActionListener {
 
             if (rs.next()) {
                 String matchDate = rs.getString("matchDate");
-                String[] dateParts = matchDate.split("-"); // '-' 기준으로 matchDate 배열로 저장
+                String[] dateParts = matchDate.split("-"); // '-' 기준으로 matchDate year, month, day 구분 저장
                 yComboBox.setSelectedItem(Integer.parseInt(dateParts[0]));
                 mComboBox.setSelectedItem(Integer.parseInt(dateParts[1]));
+                // dataParts[2] -> day hh:mm:ss 이므로 공백을 기준으로 첫번째 데이터(day) set
                 dComboBox.setSelectedItem(Integer.parseInt(new String(dateParts[2]).split(" ")[0]));
 
                 matchNameField.setText(rs.getString("matchName"));
