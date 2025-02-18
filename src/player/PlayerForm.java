@@ -1,7 +1,9 @@
 package player;
 
 import db.Util;
+import main.MainFrame;
 import match.ResultForm;
+import schedule.ScheduleForm;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -432,13 +434,20 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
                         "방출완료",
                         JOptionPane.INFORMATION_MESSAGE);
             }
-        }else if(e.getSource() == btn4) {
-                System.out.println("btn4 클릭됨");
-                new ResultForm("경기결과");
-                dispose();
+        }else if(e.getSource() == btn1) {
+            new MainFrame("대한민국 축구 국가대표팀");
+            dispose();
+        } else if (e.getSource() == btn2) {
+            new PlayerForm("대한민국 축구 국가대표팀");
+            dispose();
         } else if (e.getSource() == btn3) {
-            System.out.println("btn3 클릭됨");
-            new PlayerInputForm("선수 입력");
+            new PlayerInputForm("대한민국 축구 국가대표팀");
+            dispose();
+        } else if (e.getSource() == btn4) {
+            new ResultForm("대한민국 축구 국가대표팀");
+            dispose();
+        } else if (e.getSource() == btn5) {
+            new ScheduleForm("대한민국 축구 국가대표팀");
             dispose();
         }
     }
@@ -530,25 +539,4 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
     public void mouseEntered(MouseEvent e) {}
     @Override
     public void mouseExited(MouseEvent e) {}
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        Object obj = e.getSource();
-
-        if (obj == btn1) {
-            new MainFrame("대한민국 축구 국가대표팀");
-            dispose();
-        } else if (obj == btn2) {
-            new PlayerForm("대한민국 축구 국가대표팀");
-            dispose();
-        } else if (obj == btn3) {
-            // new InputForm();
-        } else if (obj == btn4) {
-            new ResultForm("대한민국 축구 국가대표팀");
-            dispose();
-        } else if (obj == btn5) {
-            new ScheduleForm("대한민국 축구 국가대표팀");
-            dispose();
-        }
-    }
 }
