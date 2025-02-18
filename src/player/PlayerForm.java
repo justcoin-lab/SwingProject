@@ -360,19 +360,19 @@ public class PlayerForm extends JFrame implements ActionListener, MouseListener,
     public void actionPerformed(ActionEvent e) {
         Object obj = e.getSource();
 
-        if(obj == btn1) {
-            new MainFrame("national-team management");
+        if (obj == btn1) {
+            new MainFrame("대한민국 축구 국가대표팀");
             dispose();
         } else if (obj == btn2) {
-            new PlayerForm("national-team management");
+            new PlayerForm("대한민국 축구 국가대표팀");
             dispose();
         } else if (obj == btn3) {
             // new InputForm();
         } else if (obj == btn4) {
-            new ResultForm("national-team management");
+            new ResultForm("대한민국 축구 국가대표팀");
             dispose();
         } else if (obj == btn5) {
-            new ScheduleForm("national-team management");
+            new ScheduleForm("대한민국 축구 국가대표팀");
             dispose();
         }
     }
