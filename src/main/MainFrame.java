@@ -29,7 +29,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		ct.setBackground(new Color(250, 240, 230));
 
 		// 이미지 로드
-		String imagePath = "images/main.jpg";
+		String imagePath = "images/main3.jpg";
 		File imageFile = new File(imagePath);
 		if (imageFile.exists()) {
 			mainImage = new ImageIcon(imageFile.getAbsolutePath()).getImage();
