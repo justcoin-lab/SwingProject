@@ -48,8 +48,8 @@ public class MainFrame extends JFrame implements ActionListener {
 			}
 		};
 		mainSpace.setBounds(0, 60, 1000, 540);
-		mainSpace.setLayout(null);
-		add(mainSpace);
+        mainSpace.setLayout(null);
+        add(mainSpace);
 
 		btn1 = createTabButton("대한민국 축구단", 10, 10);
 		btn2 = createTabButton("대표팀 선수 목록", 205, 10);
