@@ -1,2 +1,3 @@
-#Swing Project
-첫번째 프로젝트
+Java Swing Project
+==================
+## 첫번째 협업 프로젝트
