@@ -261,6 +261,9 @@ public class PlayerInputForm extends JFrame implements ActionListener {
     }
 
     private boolean validateInput() {
+
+        // 상위 컨테이너 저장
+        Component parentComponent = SwingUtilities.getWindowAncestor(this);
         //각 필드가 비어있는지 확인
         if(tfPn.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this,
@@ -348,6 +351,44 @@ public class PlayerInputForm extends JFrame implements ActionListener {
 
         return true;
 
+    }
+
+    // 메시지 다이얼로그를 중앙에 표시하는 새로운 메서드
+    private void showCenteredMessage(String message, Component parentComponent) {
+        JDialog dialog = new JDialog();
+        dialog.setModal(true);
+        dialog.setUndecorated(true);
+
+        JOptionPane pane = new JOptionPane(
+                message,
+                JOptionPane.WARNING_MESSAGE,
+                JOptionPane.DEFAULT_OPTION
+        );
+
+        dialog.setContentPane(pane);
+        dialog.pack();
+
+        // 부모 컴포넌트의 중앙에 위치시킴
+        if (parentComponent != null) {
+            Point loc = parentComponent.getLocation();
+            Dimension size = parentComponent.getSize();
+            dialog.setLocation(
+                    loc.x + (size.width - dialog.getWidth()) / 2,
+                    loc.y + (size.height - dialog.getHeight()) / 2
+            );
+        }
+
+        // 다이얼로그를 표시하고 자동으로 닫히도록 설정
+        dialog.setVisible(true);
+
+        // OK 버튼 클릭 시 다이얼로그 닫기
+        pane.addPropertyChangeListener(e -> {
+            if (dialog.isVisible()
+                    && e.getSource() == pane
+                    && e.getPropertyName().equals(JOptionPane.VALUE_PROPERTY)) {
+                dialog.dispose();
+            }
+        });
     }
 
     private void savePlayerInfo() {
