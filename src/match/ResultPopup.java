@@ -200,11 +200,10 @@ public class ResultPopup extends JDialog implements ActionListener {
     // 확인 취소 버튼 액션 리스너 설정
     @Override
     public void actionPerformed(ActionEvent e) {
-        Object obj = e.getSource();
-        if(obj == confirm) {
+        if(e.getSource() == confirm) {
             saveMatchResult();
             dispose();
-        } else if(obj == cancel) {
+        } else if(e.getSource() == cancel) {
             dispose();
         }
     }
