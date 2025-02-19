@@ -116,6 +116,7 @@ public class ResultForm extends JFrame implements ActionListener {
 		return createPanel(x, y, width, height, color, false);
 	}
 
+	// border switch 패널 생성
 	private JPanel createPanel(int x, int y, int width, int height, Color color, boolean border) {
 		JPanel panel = new JPanel();
 		panel.setBackground(color);
@@ -126,6 +127,7 @@ public class ResultForm extends JFrame implements ActionListener {
 		return panel;
 	}
 
+	// 라벨 생성
 	private JLabel createLabel(String text, int x, int y, int width, int height) {
 		JLabel label = new JLabel(text);
 		label.setFont(new Font("바탕", Font.PLAIN, 13));
@@ -140,11 +142,12 @@ public class ResultForm extends JFrame implements ActionListener {
 		return createButton(text, x, y, 185, 50);
 	}
 
+	// 우측 버튼
 	private JButton createRightButton(String text, int x, int y) {
 		return createButton(text, x, y, 100, 50);
 	}
 
-	// 우측 버튼
+	// 통합 버튼 생성
 	private JButton createButton(String text, int x, int y, int width, int height) {
 		JButton button = new JButton(text);
 		button.setBounds(x, y, width, height);
@@ -178,6 +181,7 @@ public class ResultForm extends JFrame implements ActionListener {
 		setTableRendererAndWidth();
 	}
 
+	// 테이블 셀 정렬 및 너비 구간 설정
 	private void setTableRendererAndWidth() {
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);  // 가운데 정렬
@@ -251,7 +255,6 @@ public class ResultForm extends JFrame implements ActionListener {
 		mvpDataPanel.revalidate();  // UI 업데이트
 		mvpDataPanel.repaint();
 	}
-
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
