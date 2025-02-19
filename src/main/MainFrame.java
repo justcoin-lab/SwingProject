@@ -51,11 +51,11 @@ public class MainFrame extends JFrame implements ActionListener {
 		mainSpace.setLayout(null);
 		add(mainSpace);
 
-		btn1 = createButton("대한민국 축구단", 10, 10);
-		btn2 = createButton("구단 선수 목록", 205, 10);
-		btn3 = createButton("선수 입력", 400, 10);
-		btn4 = createButton("구단 최근 경기", 595, 10);
-		btn5 = createButton("구단 일정", 790, 10);
+		btn1 = createTabButton("대한민국 축구단", 10, 10);
+		btn2 = createTabButton("대표팀 선수 목록", 205, 10);
+		btn3 = createTabButton("대표팀 선수 입력", 400, 10);
+		btn4 = createTabButton("대표팀 경기 결과", 595, 10);
+		btn5 = createTabButton("대표팀 일정", 790, 10);
 
 		add(btn1);
 		add(btn2);
@@ -66,7 +66,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		setVisible(true);
 	}
 
-	public JButton createButton(String text, int x, int y) {
+	public JButton createTabButton(String text, int x, int y) {
 		JButton button = new JButton(text);
 		button.setBounds(x, y, 185, 50);
 		button.setBackground(new Color(255, 228, 196));
