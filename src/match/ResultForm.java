@@ -28,7 +28,7 @@ public class ResultForm extends JFrame implements ActionListener {
 	private JPanel listInfo;
 	private JPanel mvpInfo;
 	private JPanel mvpDataPanel;
-	private JTable table; // 테이블 초기화
+	private JTable table;
 	private JButton btn1, btn2, btn3, btn4, btn5;
 	private JButton resultInsertBtn;
 	private JButton resultModifyBtn;
@@ -100,6 +100,7 @@ public class ResultForm extends JFrame implements ActionListener {
 		JLabel mvpTitlelbl = createLabel("경기 MVP", 690, 70, 60, 15);
 		add(mvpTitlelbl);
 
+		// 순서대로 배치
 		add(mvpDataPanel);
 		add(listInfo);
 		add(mvpInfo);
@@ -151,6 +152,7 @@ public class ResultForm extends JFrame implements ActionListener {
 		return button;
 	}
 
+	// 테이블 갱신(새로고침) 메서드
 	public void refreshTable() {
 		List<MatchDto> matchResult = ResultList.getMatchResultList();
 		String[] columnNames = {"매치", "날짜", "상대팀", "득점", "실점", "경고", "퇴장", "MVP"};
@@ -173,11 +175,12 @@ public class ResultForm extends JFrame implements ActionListener {
 		table.setModel(new DefaultTableModel(data, columnNames));
 		setTableRendererAndWidth();
 
-		// JScrollPane이 이미 존재하므로 다시 추가할 필요 없음
+		// JScrollPane 이미 존재하므로 다시 추가할 필요 없음
 		jsp.revalidate();
 		jsp.repaint();
 	}
 
+	// 테이블 셀 정렬 및 열 너비 설정 메서드
 	private void setTableRendererAndWidth() {
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
@@ -194,6 +197,7 @@ public class ResultForm extends JFrame implements ActionListener {
 		}
 	}
 
+	// mvp 정보를 설정하는 메서드
 	public void MvpInfo(String mvpName) {
 		mvpDataPanel.removeAll(); // 업데이트를 위한 초기화
 		mvpDataPanel.setLayout(new GridBagLayout());
@@ -248,21 +252,20 @@ public class ResultForm extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Object obj = e.getSource();
-		if (obj == btn1) {
+		if (e.getSource() == btn1) {
 			navigateTo(new MainFrame("대한민국 축구 국가대표팀"));
-		} else if (obj == btn2) {
+		} else if (e.getSource() == btn2) {
 			navigateTo(new PlayerForm("대한민국 축구 국가대표팀"));
-		} else if (obj == btn3) {
+		} else if (e.getSource() == btn3) {
 			navigateTo(new PlayerInputForm("대한민국 축구 국가대표팀"));
-		} else if (obj == btn4) {
+		} else if (e.getSource() == btn4) {
 			navigateTo(new ResultForm("대한민국 축구 국가대표팀"));
-		} else if (obj == btn5) {
+		} else if (e.getSource() == btn5) {
 			navigateTo(new ScheduleForm("대한민국 축구 국가대표팀"));
-		} else if (obj == resultInsertBtn) {
+		} else if (e.getSource() == resultInsertBtn) {
 			new ResultPopup(this, false, null, null).setVisible(true);
 			refreshTable();
-		} else if (obj == resultModifyBtn) {
+		} else if (e.getSource() == resultModifyBtn) {
 			int row = table.getSelectedRow();
 			if (row == -1) {
 				JOptionPane.showMessageDialog(this, "수정할 경기를 제대로 클릭하고 눌러주세요", "확인", JOptionPane.WARNING_MESSAGE);
@@ -273,7 +276,7 @@ public class ResultForm extends JFrame implements ActionListener {
 				new ResultPopup(this, true, oppoForEdit, mvpForEdit).setVisible(true);
 				refreshTable();
 			}
-		} else if (obj == resultDeleteBtn) {
+		} else if (e.getSource() == resultDeleteBtn) {
 			int row = table.getSelectedRow();
 			if (row == -1) {
 				JOptionPane.showMessageDialog(this, "삭제할 경기를 제대로 클릭하고 눌러주세요", "확인", JOptionPane.WARNING_MESSAGE);

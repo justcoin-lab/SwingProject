@@ -28,9 +28,11 @@ public class MainFrame extends JFrame implements ActionListener {
 		Container ct = getContentPane();
 		ct.setBackground(new Color(250, 240, 230));
 
+		// 이미지 경로
 		String imagePath = "images/main3.jpg";
 		String logoPath = "images/logo.png";
 
+		// 메인 이미지 불러오기
 		File imageFile = new File(imagePath);
 		if (imageFile.exists()) {
 			mainImage = new ImageIcon(imageFile.getAbsolutePath()).getImage();
@@ -38,6 +40,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			System.out.println("메인 이미지 파일을 찾을 수 없습니다.");
 		}
 
+		// 로고 이미지 불러오기
 		File logoFile = new File(logoPath);
 		if (logoFile.exists()) {
 			logoImage = new ImageIcon(logoFile.getAbsolutePath()).getImage();
@@ -45,6 +48,7 @@ public class MainFrame extends JFrame implements ActionListener {
 			System.out.println("로고 이미지 파일을 찾을 수 없습니다.");
 		}
 
+		// 로고 이미지가 배치될 패널 생성 좌측 배치
 		logoPanel = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
@@ -56,6 +60,7 @@ public class MainFrame extends JFrame implements ActionListener {
 		};
 		logoPanel.setBounds(10, 70, 190, 480);
 
+		// 메인 이미지가 배치될 패널 생성 우측 상단 배치
 		imagePanel = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
@@ -67,22 +72,26 @@ public class MainFrame extends JFrame implements ActionListener {
 		};
 		imagePanel.setBounds(205, 70, 770, 385);
 
+		// 텍스트가 배치될 패널 생성 우측 하단 배치
 		textPanel = new JPanel();
 		textPanel.setLayout(new BorderLayout());
 
+		// 텍스트 패널 라벨 생성 후 적용
 		JLabel label = new JLabel("Korea football-team management", JLabel.CENTER);
-		label.setFont(new Font("Arial", Font.PLAIN, 18));
+		label.setFont(new Font("Arial", Font.PLAIN, 18)); // 라벨 폰트
 		label.setBackground(new Color(250, 240, 230));
-		label.setOpaque(true);  // 배경색 적용을 위해
+		label.setOpaque(true);  // 배경색 적용
 
-		JPanel textPanel = new JPanel(new BorderLayout());
-		textPanel.add(label, BorderLayout.CENTER);
+		JPanel textPanel = new JPanel(new BorderLayout()); // 가운데 정렬을 위한 BorderLayout 설정
+		textPanel.add(label, BorderLayout.CENTER); // 라벨 가운데정렬
 		textPanel.setBounds(205, 460, 770, 90); // 텍스트 패널의 위치 및 크기 설정
 
+		// 순서대로 배치
 		add(logoPanel);
 		add(imagePanel);
 		add(textPanel);
 
+		// 버튼 생성
 		btn1 = createTabButton("대한민국 축구단", 10, 10);
 		btn2 = createTabButton("대표팀 선수 목록", 205, 10);
 		btn3 = createTabButton("대표팀 선수 입력", 400, 10);
