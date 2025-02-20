@@ -15,7 +15,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 
 import db.Util;
-import main.MainFrame;
 import match.ResultForm;
 import player.PlayerForm;
 
@@ -27,6 +26,7 @@ public class ScheduleForm extends JFrame implements ActionListener {
     private JButton[] dateButtons;
     private int currentYear, currentMonth;
     private JTable table;
+    private List<String> addedMatchDates = new ArrayList<>();
     private javax.swing.table.DefaultTableModel tableModel;
 
     public ScheduleForm(String title) {
@@ -213,30 +213,52 @@ public class ScheduleForm extends JFrame implements ActionListener {
                 dateButtons[i].setText(String.valueOf(day));
                 dateButtons[i].setEnabled(true);
 
-                // 📌 오늘 날짜인 경우 연한 빨강색으로 표시
+                // 날짜 색상 변경: 오늘 날짜는 연한 빨강, 추가된 경기는 연한 파랑
                 if (year == todayYear && month == todayMonth && day == todayDay) {
                     dateButtons[i].setBackground(new Color(255, 182, 193)); // 연한 빨강
                 } else {
-                    dateButtons[i].setBackground(Color.WHITE); // 기본 색상
+                    String matchDate = String.format("%04d-%02d-%02d", year, month + 1, day);
+                    if (addedMatchDates.contains(matchDate)) {
+                        dateButtons[i].setBackground(new Color(173, 216, 230)); // 연한 파랑색
+                    } else {
+                        dateButtons[i].setBackground(Color.WHITE); // 기본 색상
+                    }
                 }
             }
         }
     }
+
+
     private void openAddMatchDialog() {
         JDialog dialog = new JDialog(this, "경기 추가", true);
-        setLocationRelativeTo(null);
-        setResizable(false);
-        dialog.setSize(400, 400);
-        dialog.setLayout(new GridLayout(5, 2, 5, 5));
+        dialog.setSize(400, 300);
+        dialog.setLayout(new GridBagLayout()); // ✅ GridBagLayout 사용
+        dialog.setLocationRelativeTo(this); // ✅ 화면 중앙 정렬
+        dialog.setResizable(false); // ✅ 크기 조정 불가
 
-        // 입력 필드
-        JLabel lblMatchName = new JLabel("경기 이름:");
-        JTextField txtMatchName = new JTextField();
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL; // ✅ 가로로 꽉 차게 설정
+        gbc.gridx = 0;
+        gbc.gridy = 0;
 
-        JLabel lblMatchDate = new JLabel("경기 날짜(YYYY-MM-DD):");
-        Integer[] years = {2025, 2026, 2027};  // 연도 목록
-        Integer[] months = new Integer[12]; // 1~12월
-        Integer[] days = new Integer[31];   // 1~31일
+        // 경기 이름
+        dialog.add(new JLabel("경기 이름:"), gbc);
+        gbc.gridx = 1;
+        JTextField txtMatchName = new JTextField(20);
+        dialog.add(txtMatchName, gbc);
+
+        // 경기 날짜 선택 (연, 월, 일)
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        dialog.add(new JLabel("경기 날짜:"), gbc);
+
+        gbc.gridx = 1;
+        JPanel datePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 2, 0));
+
+        Integer[] years = {2025, 2026, 2027};
+        Integer[] months = new Integer[12];
+        Integer[] days = new Integer[31];
 
         for (int i = 0; i < 12; i++) months[i] = i + 1;
         for (int i = 0; i < 31; i++) days[i] = i + 1;
@@ -245,7 +267,6 @@ public class ScheduleForm extends JFrame implements ActionListener {
         JComboBox<Integer> comboMonth = new JComboBox<>(months);
         JComboBox<Integer> comboDay = new JComboBox<>(days);
 
-        JPanel datePanel = new JPanel();
         datePanel.add(comboYear);
         datePanel.add(new JLabel("년"));
         datePanel.add(comboMonth);
@@ -253,16 +274,32 @@ public class ScheduleForm extends JFrame implements ActionListener {
         datePanel.add(comboDay);
         datePanel.add(new JLabel("일"));
 
+        dialog.add(datePanel, gbc);
 
-        JLabel lblOpposing = new JLabel("상대팀:");
+        // 상대팀
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        dialog.add(new JLabel("상대팀:"), gbc);
+        gbc.gridx = 1;
         JTextField txtOpposing = new JTextField(20);
+        dialog.add(txtOpposing, gbc);
 
-        JLabel lblStadium = new JLabel("경기장:");
+        // 경기장
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        dialog.add(new JLabel("경기장:"), gbc);
+        gbc.gridx = 1;
         JTextField txtStadium = new JTextField(20);
+        dialog.add(txtStadium, gbc);
 
+        // 추가 버튼
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 2; // 버튼을 두 칸 차지하게 설정
         JButton btnSubmit = new JButton("추가");
+        dialog.add(btnSubmit, gbc);
 
-        // 버튼 클릭 시 DB 저장
+        // 버튼 클릭 이벤트 (DB 저장)
         btnSubmit.addActionListener(e -> {
             String matchName = txtMatchName.getText();
             int year = (Integer) comboYear.getSelectedItem();
@@ -278,15 +315,10 @@ public class ScheduleForm extends JFrame implements ActionListener {
             loadScheduleData(); // 테이블 새로고침
         });
 
-        dialog.add(lblMatchName); dialog.add(txtMatchName);
-        dialog.add(lblMatchDate); dialog.add(datePanel);
-        dialog.add(lblOpposing); dialog.add(txtOpposing);
-        dialog.add(lblStadium); dialog.add(txtStadium);
-        dialog.add(new JLabel()); // 빈 공간
-        dialog.add(btnSubmit);
-
         dialog.setVisible(true);
     }
+
+
     private void addMatchToDatabase(String matchName, String matchDate, String opposing, String stadium) {
         // ✅ DB 연결
         Util.init();
@@ -298,8 +330,12 @@ public class ScheduleForm extends JFrame implements ActionListener {
         String query = "INSERT INTO schedule (matchName, matchDate, opposing, stadium) VALUES ('"+ matchName + "','" + matchDate + "','" + opposing + "','" + stadium + "')";
         Util.executeSql(query);
 
+        // 경기 날짜를 addedMatchDates 리스트에 추가
+        addedMatchDates.add(matchDate);
+
         JOptionPane.showMessageDialog(this, "경기가 추가되었습니다.");
-        loadScheduleData();
+        loadScheduleData(); // 테이블 새로고침
+        displayMonth(currentYear, currentMonth); // 캘린더 새로고침
     }
 
 
@@ -325,9 +361,12 @@ public class ScheduleForm extends JFrame implements ActionListener {
 
             // ✅ 데이터를 저장할 리스트
             List<Object[]> rowData = new ArrayList<>();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // 원하는 날짜 형식 설정
             while (rs.next()) {
                 String matchName = rs.getString("matchName");
-                String matchDate = rs.getString("matchDate");
+                // matchDate를 Date 타입으로 변환한 후 원하는 형식으로 변환
+                java.sql.Date date = rs.getDate("matchDate");
+                String matchDate = sdf.format(date);  // 2025-02-21 형식으로 변환
                 String opposing = rs.getString("opposing");
                 String stadium = rs.getString("stadium");
 
@@ -365,6 +404,7 @@ public class ScheduleForm extends JFrame implements ActionListener {
         }
     }
 
+
     @Override
     public void actionPerformed(ActionEvent e) {
         Object obj = e.getSource();
@@ -381,3 +421,4 @@ public class ScheduleForm extends JFrame implements ActionListener {
         }
     }
 }
+
