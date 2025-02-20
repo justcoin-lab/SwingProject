@@ -371,6 +371,9 @@ public class ScheduleForm extends JFrame implements ActionListener {
                 String stadium = rs.getString("stadium");
 
                 rowData.add(new Object[]{matchName, matchDate, opposing, stadium});
+
+                // 추가된 날짜를 addedMatchDates 리스트에 추가
+                addedMatchDates.add(matchDate);
             }
 
             // ✅ 기존 데이터 삭제 후 추가
@@ -382,6 +385,9 @@ public class ScheduleForm extends JFrame implements ActionListener {
             // ✅ 테이블 갱신
             tableModel.fireTableDataChanged();
             System.out.println("경기 일정 로드 완료");
+
+            // 캘린더 갱신
+            displayMonth(currentYear, currentMonth);
 
         } catch (SQLException e) {
             e.printStackTrace();
