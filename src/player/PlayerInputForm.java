@@ -254,7 +254,7 @@ public class PlayerInputForm extends JFrame implements ActionListener {
                     "입력취소",  JOptionPane.YES_NO_OPTION);
 
             if(response == JOptionPane.YES_OPTION) {
-                new PlayerInputForm("대표팀 선수 등록");
+                new PlayerForm("선수 목록");
                 dispose();
             }
         }
