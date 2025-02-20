@@ -19,6 +19,7 @@ public class ResultPopup extends JDialog implements ActionListener {
     private String oppoForEdit, mvpForEdit;
     private boolean isEditMode;
 
+    // oppForEdit, mvpForEdit 은 modify 키 값
     public ResultPopup(JFrame jFrame, boolean isEditMode, String oppoForEdit, String mvpForEdit) {
         super(jFrame, isEditMode? "기록 수정" : "경기 입력", true);
         this.isEditMode = isEditMode;
@@ -159,7 +160,7 @@ public class ResultPopup extends JDialog implements ActionListener {
         }
     }
 
-    // 입력받은 데이터를 변환작업하여 MatchDto에 저장 (입력, 수정 스위칭기능 : isEditMode)
+    // 입력받은 데이터를 변환작업하여 MatchDto 저장 (입력, 수정 스위칭기능 : isEditMode)
     private void saveMatchResult() {
         try {
             Util.init();
@@ -200,11 +201,10 @@ public class ResultPopup extends JDialog implements ActionListener {
     // 확인 취소 버튼 액션 리스너 설정
     @Override
     public void actionPerformed(ActionEvent e) {
-        Object obj = e.getSource();
-        if(obj == confirm) {
+        if(e.getSource() == confirm) {
             saveMatchResult();
             dispose();
-        } else if(obj == cancel) {
+        } else if(e.getSource() == cancel) {
             dispose();
         }
     }
