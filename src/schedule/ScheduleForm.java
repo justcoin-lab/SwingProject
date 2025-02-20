@@ -95,7 +95,7 @@ public class ScheduleForm extends JFrame implements ActionListener {
         for (int i = 0; i < table.getColumnCount(); i++) {
             table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
         }
-
+        table.setDefaultEditor(Object.class, null);
         // 캘린더 패널 생성 및 추가
         calendarPanel = new JPanel();
         calendarPanel.setBounds(550, 95, 400, 300);
@@ -103,13 +103,21 @@ public class ScheduleForm extends JFrame implements ActionListener {
 
         //  ScheduleForm 클래스 내부
         JButton addMatchButton;
-
+        JButton deleteMatchBtn;
 
         addMatchButton = new JButton("경기 추가");
-        addMatchButton.setBounds(550, 410, 400, 40); // 위치 조정
+        addMatchButton.setBounds(550, 410, 185, 40); // 위치 조정
         addMatchButton.setBackground(Color.LIGHT_GRAY); // 연한 초록색
         addMatchButton.addActionListener(e -> openAddMatchDialog()); // 버튼 클릭 시 팝업 열기
         mainSpace.add(addMatchButton);
+
+        deleteMatchBtn = new JButton("경기 삭제");
+        deleteMatchBtn.setBounds(765, 410, 185, 40);
+        deleteMatchBtn.setBackground(Color.LIGHT_GRAY);
+        deleteMatchBtn.addActionListener(e -> {
+            deleteMatchLogic();
+        });
+        mainSpace.add(deleteMatchBtn);
 
 
 
@@ -381,7 +389,20 @@ public class ScheduleForm extends JFrame implements ActionListener {
         }
     }
 
-
+    public void deleteMatchLogic() {
+        int row = table.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "삭제할 경기를 제대로 클릭하고 눌러주세요", "확인", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        int confirm = JOptionPane.showConfirmDialog(this, "정말 삭제하시겠습니까?", "삭제", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            String opposing = (String) table.getValueAt(row, 2);
+            String stadium = (String) table.getValueAt(row, 3);
+            Util.executeSql("delete from schedule where opposing = '" + opposing + "' and stadium = '" + stadium + "'");
+            loadScheduleData();
+        }
+    }
 
 
     @Override
