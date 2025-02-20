@@ -13,9 +13,9 @@ import javax.swing.*;
 
 public class MainFrame extends JFrame implements ActionListener {
 
-	private JPanel mainSpace;
+	private JPanel logoPanel, imagePanel, textPanel;
 	private JButton btn1, btn2, btn3, btn4, btn5;
-	private Image mainImage;
+	private Image mainImage, logoImage;
 
 	public MainFrame(String title) {
 		setTitle(title);
@@ -28,28 +28,60 @@ public class MainFrame extends JFrame implements ActionListener {
 		Container ct = getContentPane();
 		ct.setBackground(new Color(250, 240, 230));
 
-		// 이미지 로드
 		String imagePath = "images/main3.jpg";
+		String logoPath = "images/logo.png";
+
 		File imageFile = new File(imagePath);
 		if (imageFile.exists()) {
 			mainImage = new ImageIcon(imageFile.getAbsolutePath()).getImage();
 		} else {
-			System.out.println("이미지 파일을 찾을 수 없습니다.");
+			System.out.println("메인 이미지 파일을 찾을 수 없습니다.");
 		}
 
-		// 배경 패널 생성
-		mainSpace = new JPanel() {
+		File logoFile = new File(logoPath);
+		if (logoFile.exists()) {
+			logoImage = new ImageIcon(logoFile.getAbsolutePath()).getImage();
+		} else {
+			System.out.println("로고 이미지 파일을 찾을 수 없습니다.");
+		}
+
+		logoPanel = new JPanel() {
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				if (logoImage != null) {
+					g.drawImage(logoImage, 0, 0, getWidth(), getHeight(), this);
+				}
+			}
+		};
+		logoPanel.setBounds(10, 70, 190, 480);
+
+		imagePanel = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				if (mainImage != null) {
-					g.drawImage(mainImage, 10, 10, 964, 480, this);
+					g.drawImage(mainImage, 0, 0, getWidth(), getHeight(), this);
 				}
 			}
 		};
-		mainSpace.setBounds(0, 60, 1000, 540);
-        mainSpace.setLayout(null);
-        add(mainSpace);
+		imagePanel.setBounds(205, 70, 770, 385);
+
+		textPanel = new JPanel();
+		textPanel.setLayout(new BorderLayout());
+
+		JLabel label = new JLabel("Korea football-team management", JLabel.CENTER);
+		label.setFont(new Font("Arial", Font.PLAIN, 18));
+		label.setBackground(new Color(250, 240, 230));
+		label.setOpaque(true);  // 배경색 적용을 위해
+
+		JPanel textPanel = new JPanel(new BorderLayout());
+		textPanel.add(label, BorderLayout.CENTER);
+		textPanel.setBounds(205, 460, 770, 90); // 텍스트 패널의 위치 및 크기 설정
+
+		add(logoPanel);
+		add(imagePanel);
+		add(textPanel);
 
 		btn1 = createTabButton("대한민국 축구단", 10, 10);
 		btn2 = createTabButton("대표팀 선수 목록", 205, 10);
