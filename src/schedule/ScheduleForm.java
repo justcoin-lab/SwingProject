@@ -11,6 +11,8 @@ import java.util.GregorianCalendar;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
 
 import db.Util;
 import main.MainFrame;
@@ -78,13 +80,21 @@ public class ScheduleForm extends JFrame implements ActionListener {
         schedulePanel.setBounds(35, 20, 490, 460);
         mainSpace.add(schedulePanel);
 
-        String[] headings = {"경기이름", "경기날짜", "경기장소", "상대팀"};
+        String[] headings = {"경기이름", "경기날짜", "상대팀", "경기장소"};
         tableModel = new javax.swing.table.DefaultTableModel(new Object[][]{}, headings);
         table = new JTable(tableModel);
         table.setPreferredScrollableViewportSize(new Dimension(450, 460));
         table.setFillsViewportHeight(true);
         JScrollPane scrollPane = new JScrollPane(table);
         schedulePanel.add(scrollPane, BorderLayout.CENTER);
+        JTableHeader header = table.getTableHeader();
+        DefaultTableCellRenderer headerRenderer = (DefaultTableCellRenderer) header.getDefaultRenderer();
+        headerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
 
         // 캘린더 패널 생성 및 추가
         calendarPanel = new JPanel();
