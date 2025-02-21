@@ -69,13 +69,51 @@ public class PlayerInputForm extends JFrame implements ActionListener {
         mainPanel.setLayout(null);
         add(mainPanel);
 
-        //입력 폼 패널
-        JPanel inputPanel = new JPanel();
-        inputPanel.setBackground(new Color(255,255,240));
-        inputPanel.setBounds(250,20,500,400);
-        inputPanel.setLayout(new GridBagLayout());
+        // 입력 폼과 이미지 패널을 포함할 컨테이너 패널
+        JPanel containerPanel = new JPanel(new GridBagLayout());
+        containerPanel.setBackground(new Color(255, 255, 240));
+        containerPanel.setBounds(50, 20, 900, 400);
+        mainPanel.add(containerPanel);
+
+        // 입력 폼 패널
+        JPanel inputPanel = new JPanel(new GridBagLayout());
+        inputPanel.setBackground(new Color(255, 255, 240));
         inputPanel.setBorder(BorderFactory.createTitledBorder("선수 정보 입력"));
-        mainPanel.add(inputPanel);
+
+        // 이미지 패널
+        JPanel imagePanel = new JPanel(new BorderLayout(5, 5));
+        imagePanel.setBackground(new Color(255, 255, 240));
+
+        // 이미지 미리보기 초기화
+        imagePreview = new JLabel();
+        imagePreview.setPreferredSize(new Dimension(150, 180));
+        imagePreview.setBorder(BorderFactory.createEtchedBorder());
+        imagePreview.setHorizontalAlignment(JLabel.CENTER);
+        imagePreview.setText("이미지 미리보기");
+
+        btnSelectImage = new JButton("사진 선택");
+        btnSelectImage.addActionListener(this);
+
+        imagePanel.add(imagePreview, BorderLayout.CENTER);
+        imagePanel.add(btnSelectImage, BorderLayout.SOUTH);
+
+        // containerPanel에 inputPanel과 imagePanel 배치
+        GridBagConstraints containerGbc = new GridBagConstraints();
+
+        // 입력 패널 배치
+        containerGbc.gridx = 0;
+        containerGbc.gridy = 0;
+        containerGbc.weightx = 0.7;
+        containerGbc.weighty = 1.0;
+        containerGbc.fill = GridBagConstraints.BOTH;
+        containerGbc.anchor = GridBagConstraints.WEST;
+        containerPanel.add(inputPanel, containerGbc);
+
+        // 이미지 패널 배치
+        containerGbc.gridx = 1;
+        containerGbc.weightx = 0.3;
+        containerGbc.anchor = GridBagConstraints.EAST;
+        containerPanel.add(imagePanel, containerGbc);
 
         //입력 필드 초기화
         initInputFields(inputPanel);
@@ -140,18 +178,17 @@ public class PlayerInputForm extends JFrame implements ActionListener {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5,5,5,5);
 
-        //입력 필드 초기화
-        tfPn = new JTextField(20);
-        tfName = new JTextField(20);
-        tfAge = new JTextField(20);
-        tfHeight = new JTextField(20);
-        tfWeight = new JTextField(20);
-
+        // 입력 필드 초기화
+                tfPn = new JTextField(15);
+        tfName = new JTextField(15);
+        tfAge = new JTextField(15);
+        tfHeight = new JTextField(15);
+        tfWeight = new JTextField(15);
         cbPosition = new JComboBox<>(new String[]{"FW", "MF", "DF", "GK"});
-        cbInjury = new JComboBox<>(new String[] {"없음", "부상중"}); //0, 1로 저장됨
-        cbRoster = new JComboBox<>(new String[]{"선발", "후보"}); //m, s로 저장됨
+        cbInjury = new JComboBox<>(new String[]{"없음", "부상중"});
+        cbRoster = new JComboBox<>(new String[]{"선발", "후보"});
 
-        //이미지 미리보기
+        /*//이미지 미리보기
         imagePreview = new JLabel();
         imagePreview.setPreferredSize(new Dimension(150,180));
         imagePreview.setBorder(BorderFactory.createEtchedBorder());
@@ -159,7 +196,7 @@ public class PlayerInputForm extends JFrame implements ActionListener {
         imagePreview.setText("이미지 미리보기");
 
         btnSelectImage = new JButton("사진 선택");
-        btnSelectImage.addActionListener(this);
+        btnSelectImage.addActionListener(this);*/
 
         //필드 배치
         addFormField(panel, gbc, "백넘버", tfPn, 0);
@@ -171,7 +208,7 @@ public class PlayerInputForm extends JFrame implements ActionListener {
         addFormField(panel, gbc, "부상여부", cbInjury, 6);
         addFormField(panel, gbc, "선발여부", cbRoster, 7);
 
-        //이미지 미리보기와 버튼 배치
+        /*//이미지 미리보기와 버튼 배치
         JPanel imagePanel  = new JPanel(new BorderLayout(5,5));
         imagePanel.add(imagePreview, BorderLayout.CENTER);
         imagePanel.add(btnSelectImage, BorderLayout.SOUTH);
@@ -179,19 +216,18 @@ public class PlayerInputForm extends JFrame implements ActionListener {
         gbc.gridx = 0;
         gbc.gridy = 8;
         gbc.fill = GridBagConstraints.BOTH;
-        panel.add(imagePanel, gbc);
+        panel.add(imagePanel, gbc);*/
     }
 
     private void  addFormField(JPanel panel, GridBagConstraints gbc, String labelText,
                                JComponent component, int row) {
         gbc.gridx = 0;
         gbc.gridy = row;
-        gbc.gridwidth = 1;
-        gbc.anchor = GridBagConstraints.EAST;
+        gbc.weightx = 0.3;
         panel.add(new JLabel(labelText + ": "), gbc);
 
         gbc.gridx = 1;
-        gbc.anchor = GridBagConstraints.WEST;
+        gbc.weightx = 0.7;
         panel.add(component, gbc);
 
     }
