@@ -17,7 +17,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Objects;
-
+//최종 수정본
 public class PlayerInputForm extends JFrame implements ActionListener {
     //상위 메뉴 버튼
     public JButton btn1;
