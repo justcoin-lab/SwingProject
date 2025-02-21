@@ -15,8 +15,10 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 
 import db.Util;
+import main.MainFrame;
 import match.ResultForm;
 import player.PlayerForm;
+import player.PlayerInputForm;
 
 public class ScheduleForm extends JFrame implements ActionListener {
     public JPanel mainSpace;
@@ -45,27 +47,11 @@ public class ScheduleForm extends JFrame implements ActionListener {
         mainSpace.setBounds(0, 60, 1000, 540);
         mainSpace.setLayout(null);
 
-        btn1 = new JButton("대한민국 축구단");
-        btn1.setBounds(10, 10, 185, 50);
-        btn1.setBackground(new Color(255, 228, 196));
-
-        btn2 = new JButton("구단 선수 목록");
-        btn2.setBounds(205, 10, 185, 50);
-        btn2.setBackground(new Color(255, 228, 196));
-        btn2.addActionListener(this);
-
-        btn3 = new JButton("선수 입력");
-        btn3.setBounds(400, 10, 185, 50);
-        btn3.setBackground(new Color(255, 228, 196));
-
-        btn4 = new JButton("구단 최근 경기");
-        btn4.setBounds(595, 10, 185, 50);
-        btn4.setBackground(new Color(255, 228, 196));
-        btn4.addActionListener(this);
-
-        btn5 = new JButton("구단 일정");
-        btn5.setBounds(790, 10, 185, 50);
-        btn5.setBackground(new Color(255, 228, 196));
+        btn1 = createTabButton("대한민국 축구단", 10, 10);
+        btn2 = createTabButton("대표팀 선수 목록", 205, 10);
+        btn3 = createTabButton("대표팀 선수 입력", 400, 10);
+        btn4 = createTabButton("대표팀 경기 결과", 595, 10);
+        btn5 = createTabButton("대표팀 일정", 790, 10);
 
         add(btn1);
         add(btn2);
@@ -119,8 +105,6 @@ public class ScheduleForm extends JFrame implements ActionListener {
         });
         mainSpace.add(deleteMatchBtn);
 
-
-
         // 현재 연도와 월 저장
         currentYear = Calendar.getInstance().get(Calendar.YEAR);
         currentMonth = Calendar.getInstance().get(Calendar.MONTH);
@@ -131,6 +115,19 @@ public class ScheduleForm extends JFrame implements ActionListener {
         loadScheduleData(); // 📌 경기 일정 데이터 불러오기
 
         setVisible(true);
+    }
+
+    private JButton createTabButton(String text, int x, int y) {
+        return createButton(text, x, y, 185, 50);
+    }
+
+    private JButton createButton(String text, int x, int y, int width, int height) {
+        JButton button = new JButton(text);
+        button.setBounds(x, y, width, height);
+        button.setBackground(new Color(255, 228, 196));
+        button.setBorderPainted(false);
+        button.addActionListener(this);
+        return button;
     }
 
     public void setupUI() {
@@ -184,7 +181,7 @@ public class ScheduleForm extends JFrame implements ActionListener {
         for (int i = 0; i < 42; i++) {
             dateButtons[i] = new JButton();
             dateButtons[i].setEnabled(false);
-            dateButtons[i].setBackground(Color.white);
+            dateButtons[i].setBackground(Color.WHITE);
             calendarPanel.add(dateButtons[i]);
         }
     }
@@ -197,46 +194,36 @@ public class ScheduleForm extends JFrame implements ActionListener {
         int firstDayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
         int lastDate = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 
-        // 오늘 날짜 가져오기
+        // 📌 오늘 날짜 가져오기
         Calendar today = Calendar.getInstance();
         int todayYear = today.get(Calendar.YEAR);
         int todayMonth = today.get(Calendar.MONTH);
         int todayDay = today.get(Calendar.DAY_OF_MONTH);
 
-        // UI 갱신 작업을 이벤트 디스패처 스레드에서 실행하도록 변경
-        SwingUtilities.invokeLater(() -> {
-            for (int i = 0; i < 42; i++) {
-                if (i < firstDayOfWeek - 1 || i >= firstDayOfWeek - 1 + lastDate) {
-                    dateButtons[i].setText("");
-                    dateButtons[i].setEnabled(false);
-                    dateButtons[i].setBackground(Color.WHITE); // 기본 색상
-                } else {
-                    int day = i - (firstDayOfWeek - 2);
-                    dateButtons[i].setText(String.valueOf(day));
-                    dateButtons[i].setEnabled(true);
+        for (int i = 0; i < 42; i++) {
+            if (i < firstDayOfWeek - 1 || i >= firstDayOfWeek - 1 + lastDate) {
+                dateButtons[i].setText("");
+                dateButtons[i].setEnabled(false);
+                dateButtons[i].setBackground(Color.WHITE); // 기본 색상
+            } else {
+                int day = i - (firstDayOfWeek - 2);
+                dateButtons[i].setText(String.valueOf(day));
+                dateButtons[i].setEnabled(true);
 
-                    // 날짜 색상 변경: 오늘 날짜는 연한 빨강, 추가된 경기는 연한 파랑
-                    if (year == todayYear && month == todayMonth && day == todayDay) {
-                        dateButtons[i].setBackground(new Color(255, 182, 193)); // 연한 빨강
+                // 날짜 색상 변경: 오늘 날짜는 연한 빨강, 추가된 경기는 연한 파랑
+                String matchDate = String.format("%04d-%02d-%02d", year, month + 1, day);
+                if (year == todayYear && month == todayMonth && day == todayDay) {
+                    dateButtons[i].setBackground(new Color(255, 182, 193)); // 연한 빨강
+                } else {
+                    if (addedMatchDates.contains(matchDate)) {
+                        dateButtons[i].setBackground(new Color(173, 216, 230)); // 연한 파랑색
                     } else {
-                        String matchDate = String.format("%04d-%02d-%02d", year, month + 1, day);
-                        if (addedMatchDates.contains(matchDate)) {
-                            dateButtons[i].setBackground(new Color(173, 216, 230)); // 연한 파랑색
-                        } else {
-                            dateButtons[i].setBackground(Color.WHITE); // 기본 색상
-                        }
+                        dateButtons[i].setBackground(Color.WHITE); // 기본 색상
                     }
                 }
             }
-
-            // 캘린더 다시 그리기
-            calendarPanel.revalidate();
-            calendarPanel.repaint();
-        });
+        }
     }
-
-
-
 
     private void openAddMatchDialog() {
         JDialog dialog = new JDialog(this, "경기 추가", true);
@@ -327,58 +314,49 @@ public class ScheduleForm extends JFrame implements ActionListener {
         dialog.setVisible(true);
     }
 
-
     private void addMatchToDatabase(String matchName, String matchDate, String opposing, String stadium) {
-        // DB 연결
+        // ✅ DB 연결
         Util.init();
 
-        // SQL 실행 로그 출력
+        // ✅ SQL 실행 로그 출력
         System.out.println("경기 추가: " + matchName + ", " + matchDate + ", " + opposing + ", " + stadium);
 
-        // SQL 작성
-        String query = "INSERT INTO schedule (matchName, matchDate, opposing, stadium) VALUES ('" + matchName + "','" + matchDate + "','" + opposing + "','" + stadium + "')";
+        // ✅ SQL 작성
+        String query = "INSERT INTO schedule (matchName, matchDate, opposing, stadium) VALUES ('"+ matchName + "','" + matchDate + "','" + opposing + "','" + stadium + "')";
         Util.executeSql(query);
 
         // 경기 날짜를 addedMatchDates 리스트에 추가
         addedMatchDates.add(matchDate);
 
-        // 경기 일정 데이터 갱신
+        JOptionPane.showMessageDialog(this, "경기가 추가되었습니다.");
         loadScheduleData(); // 테이블 새로고침
         displayMonth(currentYear, currentMonth); // 캘린더 새로고침
-        JOptionPane.showMessageDialog(this, "경기가 추가되었습니다.");
     }
-
-
-
-
 
     public void loadScheduleData() {
         try {
-            // DB 연결 확인
+            // ✅ DB 연결 확인
             Util.init();
 
-            // SQL 실행 전에 로그 출력 (디버깅)
+            // ✅ SQL 실행 전에 로그 출력 (디버깅)
             String query = "SELECT matchName, matchDate, opposing, stadium FROM schedule order by matchDate asc";
             System.out.println("Executing Query: " + query);
 
             ResultSet rs = Util.getResult(query);
 
-            // Null 체크 추가
+            // ✅ Null 체크 추가
             if (rs == null) {
                 System.out.println("ResultSet is NULL. Check DB connection and query.");
                 JOptionPane.showMessageDialog(this, "DB 오류: ResultSet이 null입니다.");
                 return;
             }
 
-            // 데이터를 저장할 리스트
+            // ✅ 데이터를 저장할 리스트
             List<Object[]> rowData = new ArrayList<>();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); // 원하는 날짜 형식 설정
-
-            // 기존 addedMatchDates 리스트 초기화
-            addedMatchDates.clear();
-
             while (rs.next()) {
                 String matchName = rs.getString("matchName");
+                // matchDate를 Date 타입으로 변환한 후 원하는 형식으로 변환
                 java.sql.Date date = rs.getDate("matchDate");
                 String matchDate = sdf.format(date);  // 2025-02-21 형식으로 변환
                 String opposing = rs.getString("opposing");
@@ -390,13 +368,13 @@ public class ScheduleForm extends JFrame implements ActionListener {
                 addedMatchDates.add(matchDate);
             }
 
-            // 기존 데이터 삭제 후 추가
+            // ✅ 기존 데이터 삭제 후 추가
             tableModel.setRowCount(0);
             for (Object[] row : rowData) {
                 tableModel.addRow(row);
             }
 
-            // 테이블 갱신
+            // ✅ 테이블 갱신
             tableModel.fireTableDataChanged();
             System.out.println("경기 일정 로드 완료");
 
@@ -409,7 +387,6 @@ public class ScheduleForm extends JFrame implements ActionListener {
         }
     }
 
-
     public void deleteMatchLogic() {
         int row = table.getSelectedRow();
         if (row == -1) {
@@ -418,42 +395,36 @@ public class ScheduleForm extends JFrame implements ActionListener {
         }
         int confirm = JOptionPane.showConfirmDialog(this, "정말 삭제하시겠습니까?", "삭제", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
-            // 경기 날짜 정보 가져오기
-            String matchDate = (String) table.getValueAt(row, 1);  // 경기 날짜
-            String opposing = (String) table.getValueAt(row, 2);   // 상대팀
-            String stadium = (String) table.getValueAt(row, 3);    // 경기장
-
-            // DB에서 해당 경기 삭제
+            String matchDate = (String) table.getValueAt(row, 1);
+            String opposing = (String) table.getValueAt(row, 2);
+            String stadium = (String) table.getValueAt(row, 3);
             Util.executeSql("delete from schedule where opposing = '" + opposing + "' and stadium = '" + stadium + "'");
 
-            // 추가된 경기 날짜 리스트에서 해당 날짜 제거
             addedMatchDates.remove(matchDate);
-
-            // 테이블 데이터 새로 고침
+            addedMatchDates.clear();
             loadScheduleData();
-
-            // 캘린더 상태 갱신 (삭제된 경기를 반영)
-            displayMonth(currentYear, currentMonth);  // 캘린더 새로 고침
+            displayMonth(currentYear, currentMonth);
         }
     }
 
-
-
-
     @Override
     public void actionPerformed(ActionEvent e) {
-        Object obj = e.getSource();
-
-        if (obj == btn2) {
-            new PlayerForm("대한민국 축구 국가대표팀");
-            dispose();
-        } else if (obj == btn4) {
-            new ResultForm("대한민국 축구 국가대표팀");
-            dispose();
-        } else if (obj == btn5) {
-            new ScheduleForm("대한민국 축구 국가대표팀");
-            dispose();
+        if (e.getSource() == btn1) {
+            navigateTo(new MainFrame("대한민국 축구 국가대표팀"));
+        } else if (e.getSource() == btn2) {
+            navigateTo(new PlayerForm("대한민국 축구 국가대표팀"));
+        } else if (e.getSource() == btn3) {
+            navigateTo(new PlayerInputForm("대한민국 축구 국가대표팀"));
+        } else if (e.getSource() == btn4) {
+            navigateTo(new ResultForm("대한민국 축구 국가대표팀"));
+        } else if (e.getSource() == btn5) {
+            navigateTo(new ScheduleForm("대한민국 축구 국가대표팀"));
         }
+    }
+
+    private void navigateTo(JFrame frame) {
+        frame.setVisible(true);
+        dispose();
     }
 }
 
