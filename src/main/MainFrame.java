@@ -1,6 +1,7 @@
 package main;
 
 import match.ResultForm;
+import player.PlayerAdd;
 import player.PlayerForm;
 import player.PlayerInputForm;
 import schedule.ScheduleForm;
@@ -122,8 +123,10 @@ public class MainFrame extends JFrame implements ActionListener {
 			new MainFrame("대한민국 축구 국가대표팀");
 		} else if (e.getSource() == btn2) {
 			new PlayerForm("대한민국 축구 국가대표팀");
+			//new PlayerAdd("시우 테스트");
 		} else if (e.getSource() == btn3) {
-			new PlayerInputForm("대한민국 축구 국가대표팀");
+			//new PlayerInputForm("대한민국 축구 국가대표팀");
+			new PlayerAdd("시우연습");
 		} else if (e.getSource() == btn4) {
 			new ResultForm("대한민국 축구 국가대표팀");
 		} else if (e.getSource() == btn5) {
