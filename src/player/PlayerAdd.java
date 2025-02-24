@@ -17,21 +17,23 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class PlayerAdd extends JFrame implements ActionListener {
-    // 상단 메뉴 버튼
-    private JButton btn1, btn2, btn3, btn4, btn5;
-    
+    private JButton btn2;
+    private JButton btn3;
+    private JButton btn4;
+    private JButton btn5;
+
     // 입력 필드
     private JTextField tfPn, tfName, tfAge, tfHeight, tfWeight;
     private JComboBox<String> cbPosition, cbInjury, cbRoster;
-    
+
     // 이미지 선택
     private JButton btnSelectImage;
     private JLabel imagePreview;
     private File selectedImageFile;
-    
+
     // 저장, 취소 버튼
     private JButton btnSave, btnCancel;
-    
+
     public PlayerAdd(String title) {
         setTitle(title);
         setSize(1000, 600);
@@ -46,7 +48,7 @@ public class PlayerAdd extends JFrame implements ActionListener {
 
         // 상단 메뉴 초기화
         initTopButtons();
-        
+
         // 메인 패널
         JPanel mainPanel = new JPanel();
         mainPanel.setBackground(new Color(255, 255, 240));
@@ -61,7 +63,7 @@ public class PlayerAdd extends JFrame implements ActionListener {
         inputPanel.setLayout(new GridBagLayout());
         inputPanel.setBorder(BorderFactory.createTitledBorder("선수 정보 입력"));
         mainPanel.add(inputPanel);
-        
+
         // 입력 필드 초기화
         initInputFields(inputPanel);
 
@@ -81,9 +83,10 @@ public class PlayerAdd extends JFrame implements ActionListener {
 
         setVisible(true);
     }
-    
+
     private void initTopButtons() {
-        btn1 = new JButton("대한민국 축구단");
+        // 상단 메뉴 버튼
+        JButton btn1 = new JButton("대한민국 축구단");
         btn1.setBounds(10, 10, 185, 50);
         btn1.setBackground(new Color(255, 228, 196));
         btn1.setBorderPainted(false);
@@ -175,9 +178,10 @@ public class PlayerAdd extends JFrame implements ActionListener {
         panel.add(component, gbc);
     }
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // TODO Auto-generated method stub
+
+    }
 }
+
